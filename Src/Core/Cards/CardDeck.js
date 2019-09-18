@@ -1,16 +1,24 @@
 // @ts-check
 const Card = require('./Card');
 
-const CARDS_ARRAY_RAW = require('./Data/arrCards');
-const CARDS_ARRAY = CARDS_ARRAY_RAW.map(card => new Card(card.value, card.suit));
-
 const ArrayUtils = require('../../Utilities/Array');
 const CardUtils = require('./Utils');
 
 class CardDeck {
   constructor(cardsArray) {
-    this.cardsArray = ArrayUtils._cloneArray(CARDS_ARRAY);
+    this.cardsArray = CardDeck._generateDeckCards();
     if (cardsArray) this.cardsArray = cardsArray;
+  }
+
+  static _generateDeckCards() {
+    const cards = [];
+    const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
+    for (let i = 1; i < 14; i += 1) {
+      for (let j = 0; j < 4; j += 1) {
+        cards.push(new Card(i.toString(), suits[j]));
+      }
+    }
+    return cards;
   }
 
   /**
@@ -35,7 +43,7 @@ class CardDeck {
   }
 
   reset() {
-    this.cardsArray = ArrayUtils._cloneArray(CARDS_ARRAY);
+    this.cardsArray = ArrayUtils._cloneArray(CardDeck._generateDeckCards());
   }
 
   /**
@@ -48,7 +56,7 @@ class CardDeck {
   }
 
   /**
-   * @param {Card} card 
+   * @param {Card} card
    * @returns {String}
    */
   formatCard(card) {

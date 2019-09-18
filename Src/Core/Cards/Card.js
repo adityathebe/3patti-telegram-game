@@ -1,7 +1,7 @@
 class Card {
   /**
    * @param {String} value
-   * @param {"spades" | "diamonds" | "hearts" | "clubs"} suit
+   * @param {String} suit "spades" | "diamonds" | "hearts" | "clubs"
    */
   constructor(value, suit) {
     this.value = value;
