@@ -10,7 +10,20 @@ const ArrayUtils = {
   _cloneArray: function _cloneArray(a) {
     return JSON.parse(JSON.stringify(a));
   },
+  _countOccurence: function _countOccurence(arr, query) {
+    let numOccurence = 0;
+    arr.forEach(val => {
+      if (val === query) numOccurence += 1;
+    });
+    return numOccurence;
+  },
+  _getMaxValue: function _getMaxValue(arr) {
+    let max = 0;
+    arr.forEach(v => {
+      if (v > max) max = v;
+    });
+    return max;
+  },
 };
-
 
 module.exports = ArrayUtils;
