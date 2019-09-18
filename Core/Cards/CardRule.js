@@ -7,6 +7,27 @@ class CardRule {
    * @param {Card[]} cards
    * @returns {Boolean}
    */
+  static _hasSequence(cards) {
+    const cardValues = cards.map(card => Number(card.value));
+    cardValues.sort();
+    if (cardValues[0] + 1 === cardValues[1] && cardValues[1] === cardValues[2] - 1) return true;
+    if (cardValues[0] === 1 && cardValues[1] == 11 && cardValues[2] == 12) return true;
+    return false;
+  }
+
+  /**
+   * @param {Card[]} cards
+   * @returns {Number[]}
+   */
+  static _getSequenceValues(cards) {
+    if (CardRule._hasSequence(cards) === false) throw new Error('Cards do not contain any sequence');
+    return cards.map(card => Number(card.value)).sort();
+  }
+
+  /**
+   * @param {Card[]} cards
+   * @returns {Boolean}
+   */
   static _hasColor(cards) {
     return cards[0].suit == cards[1].suit && cards[0].suit === cards[2].suit;
   }
@@ -34,9 +55,9 @@ class CardRule {
    */
   static _getPairValue(cards) {
     if (CardRule._hasPair(cards) === false) throw new Error('Cards have no pair in them');
-    if (cards[0].value === cards[1].value) return cards[0].value;
-    if (cards[0].value === cards[2].value) return cards[0].value;
-    if (cards[1].value === cards[2].value) return cards[1].value;
+    if (cards[0].value === cards[1].value) return Number(cards[0].value);
+    if (cards[0].value === cards[2].value) return Number(cards[0].value);
+    if (cards[1].value === cards[2].value) return Number(cards[1].value);
   }
 
   /**
@@ -53,7 +74,7 @@ class CardRule {
    */
   static _getTrialValue(cards) {
     if (CardRule._hasTrial(cards) === false) throw new Error('Cards have no trial in them');
-    return cards[0].value;
+    return Number(cards[0].value);
   }
 
   /**
@@ -67,12 +88,18 @@ class CardRule {
       trial: {
         status: CardRule._hasTrial(cards),
       },
-      color: { status: CardRule._hasColor(cards) },
+      color: {
+        status: CardRule._hasColor(cards),
+      },
+      sequence: {
+        status: CardRule._hasSequence(cards),
+      },
     };
 
     if (info.pair.status) info.pair.value = CardRule._getPairValue(cards);
     if (info.trial.status) info.trial.value = CardRule._getTrialValue(cards);
     if (info.color.status) info.color.value = CardRule._getColorValue(cards);
+    if (info.sequence.status) info.sequence.value = CardRule._getSequenceValues(cards);
     return info;
   }
 }
