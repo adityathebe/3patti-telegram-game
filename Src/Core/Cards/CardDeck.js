@@ -10,10 +10,13 @@ class CardDeck {
     if (cardsArray) this.cardsArray = cardsArray;
   }
 
+  /**
+   * @returns {Card[]}
+   */
   static _generateDeckCards() {
     const cards = [];
     const suits = ['spades', 'hearts', 'diamonds', 'clubs'];
-    for (let i = 1; i < 14; i += 1) {
+    for (let i = 2; i <= 14; i += 1) {
       for (let j = 0; j < 4; j += 1) {
         cards.push(new Card(i.toString(), suits[j]));
       }
