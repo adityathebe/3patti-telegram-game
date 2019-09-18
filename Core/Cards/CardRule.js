@@ -1,5 +1,4 @@
 // @ts-check
-
 const Card = require('./Card');
 
 class CardRule {
@@ -101,6 +100,38 @@ class CardRule {
     if (info.color.status) info.color.value = CardRule._getColorValue(cards);
     if (info.sequence.status) info.sequence.value = CardRule._getSequenceValues(cards);
     return info;
+  }
+
+  /**
+   * @param {Card[][]} cardsList
+   * @returns {Number[]} winner's array index
+   */
+  static rankCards(cardsList) {
+    const ranks = [];
+    for (const cards of cardsList) {
+      const cardInfo = CardRule.getInfo(cards);
+    }
+
+    // TODO
+    return cardsList.map((_, idx) => idx);
+  }
+
+  /**
+   * @param {Card[][]} cardsList
+   * @returns {Number} winner's array index
+   */
+  static determineWinner(cardsList) {
+    if (cardsList.length < 2) throw RangeError('cardsList should be at least length 2');
+    const ranks = CardRule.rankCards(cardsList);
+    let highestRank = -Infinity;
+    let highestRankIndex = -Infinity;
+    ranks.forEach((rank, idx) => {
+      if (rank > highestRank) {
+        highestRank = rank;
+        highestRankIndex = idx;
+      }
+    });
+    return highestRankIndex;
   }
 }
 
