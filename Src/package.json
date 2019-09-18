@@ -1,0 +1,24 @@
+{
+  "name": "teen-patti-multiplayer-card-game-telegram",
+  "version": "1.0.0",
+  "description": "A multiplayer 3 patti game for Telegram",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityathebe/3patti-telegram-game.git"
+  },
+  "keywords": [],
+  "author": "Aditya Thebe <contact@adityathebe.com> (https://www.adityathebe.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adityathebe/3patti-telegram-game/issues"
+  },
+  "homepage": "https://github.com/adityathebe/3patti-telegram-game#readme",
+  "dependencies": {
+    "simple-telegram-bot-api": "^0.0.7"
+  }
+}

@@ -1,6 +1,8 @@
 // @ts-check
 const Card = require('./Card');
 
+const ArrayUtils = require('../../Utilities/Array');
+
 class CardRule {
   /**
    * @param {Card[]} cards
@@ -104,34 +106,79 @@ class CardRule {
 
   /**
    * @param {Card[][]} cardsList
-   * @returns {Number[]} winner's array index
+   * @returns {Boolean[]} One hot encoded array
    */
-  static rankCards(cardsList) {
-    const ranks = [];
-    for (const cards of cardsList) {
-      const cardInfo = CardRule.getInfo(cards);
+  static determineWinners(cardsList) {
+    if (cardsList.length < 2) throw RangeError('cardsList should be at least of length 2');
+
+    ////////////
+    // Trials //
+    ////////////
+    const trialBearersEncoding = cardsList.map(cards => CardRule._hasTrial(cards));
+    const numTrialBearers = ArrayUtils._countOccurence(trialBearersEncoding, true);
+    if (numTrialBearers === 1) {
+      return trialBearersEncoding;
+    } else if (numTrialBearers > 1) {
+      let maxTrialValue = 0;
+      let maxTrialCardIndex = -1;
+      cardsList.forEach((cards, idx) => {
+        if (!CardRule._hasTrial(cards)) return false;
+        const trialValue = CardRule._getTrialValue(cards);
+        if (trialValue > maxTrialValue) {
+          maxTrialValue = trialValue;
+          maxTrialCardIndex = idx;
+        }
+      });
+      return cardsList.map((_, idx) => idx === maxTrialCardIndex);
     }
 
-    // TODO
-    return cardsList.map((_, idx) => idx);
-  }
+    //////////////
+    // Sequence //
+    //////////////
+    const seqBearersEncoding = cardsList.map(cards => CardRule._hasSequence(cards));
+    const numSeqBearers = ArrayUtils._countOccurence(seqBearersEncoding, true);
+    if (numSeqBearers === 1) {
+      return seqBearersEncoding;
+    } else if (numSeqBearers > 1) {
+      let maxSeqVal = 0;
+      let maxSeqCardIndex = -1;
+      cardsList.forEach((cards, idx) => {
+        if (!CardRule._hasSequence(cards)) return false;
+        const seqValues = CardRule._getSequenceValues(cards);
+        const maxValueInSequence = ArrayUtils._getMaxValue(seqValues);
+        if (maxValueInSequence > maxSeqVal) {
+          maxSeqVal = maxValueInSequence;
+          maxSeqCardIndex = idx;
+        }
+      });
+      return cardsList.map((_, idx) => idx === maxSeqCardIndex);
+    }
 
-  /**
-   * @param {Card[][]} cardsList
-   * @returns {Number} winner's array index
-   */
-  static determineWinner(cardsList) {
-    if (cardsList.length < 2) throw RangeError('cardsList should be at least length 2');
-    const ranks = CardRule.rankCards(cardsList);
-    let highestRank = -Infinity;
-    let highestRankIndex = -Infinity;
-    ranks.forEach((rank, idx) => {
-      if (rank > highestRank) {
-        highestRank = rank;
-        highestRankIndex = idx;
-      }
-    });
-    return highestRankIndex;
+    ////////////
+    // Colors //
+    ////////////
+    const colorBearersEncoding = cardsList.map(cards => CardRule._hasSequence(cards));
+    const numColorBearers = ArrayUtils._countOccurence(colorBearersEncoding, true);
+    if (numColorBearers === 1) {
+      return colorBearersEncoding;
+    } else if (numColorBearers > 1) {
+      let maxSeqVal = 0;
+      let maxSeqCardIndex = -1;
+      cardsList.forEach((cards, idx) => {
+        if (!CardRule._hasSequence(cards)) return false;
+        const seqValues = CardRule._getSequenceValues(cards);
+        const maxValueInSequence = ArrayUtils._getMaxValue(seqValues);
+        if (maxValueInSequence > maxSeqVal) {
+          maxSeqVal = maxValueInSequence;
+          maxSeqCardIndex = idx;
+        }
+      });
+      return cardsList.map((_, idx) => idx === maxSeqCardIndex);
+    }
+
+    ///////////
+    // Pairs //
+    ///////////
   }
 }
 
