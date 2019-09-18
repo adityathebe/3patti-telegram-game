@@ -18,8 +18,8 @@ class CardDeck {
    * @returns {CardDeck}
    */
   shuffle(iter = 1) {
-    if (typeof iter !== 'number') iter = 1;
-    if (iter < 1) iter = 1;
+    if (typeof iter !== 'number') throw new TypeError('iter should be a number');
+    if (iter < 1 || iter > 50) throw new RangeError('iter can only take value in range [1, 50]');
     for (let i = 0; i < iter; i += 1) {
       this.cardsArray = ArrayUtils._shuffleArray(this.cardsArray);
     }
@@ -47,10 +47,15 @@ class CardDeck {
     return this.cardsArray.pop();
   }
 
+  /**
+   * @param {Card} card 
+   * @returns {String}
+   */
   formatCard(card) {
+    const cardSuit = CardUtils.suitsMap[card.suit];
     let cardValue = CardUtils.valueMap[card.value];
     cardValue = cardValue ? cardValue : card.value;
-    return `${cardValue}${CardUtils.suitsMap[card.suit]}`;
+    return `${cardValue}${cardSuit}`;
   }
 
   /**
