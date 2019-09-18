@@ -10,9 +10,9 @@ class CardRule {
    */
   static _hasSequence(cards) {
     const cardValues = cards.map(card => Number(card.value));
-    cardValues.sort();
+    cardValues.sort((a, b) => a - b);
     if (cardValues[0] + 1 === cardValues[1] && cardValues[1] === cardValues[2] - 1) return true;
-    if (cardValues[0] === 1 && cardValues[1] == 11 && cardValues[2] == 12) return true;
+    if (cardValues[0] === 2 && cardValues[1] === 3 && cardValues[2] === 14) return true; // A, 2, 3
     return false;
   }
 
@@ -22,7 +22,7 @@ class CardRule {
    */
   static _getSequenceValues(cards) {
     if (CardRule._hasSequence(cards) === false) throw new Error('Cards do not contain any sequence');
-    return cards.map(card => Number(card.value)).sort();
+    return cards.map(card => Number(card.value)).sort((a, b) => a - b);
   }
 
   /**
@@ -35,7 +35,7 @@ class CardRule {
 
   /**
    * @param {Card[]} cards
-   * @returns {"spades" | "diamonds" | "hearts" | "clubs"}
+   * @returns {String}
    */
   static _getColorValue(cards) {
     if (CardRule._hasColor(cards) === false) throw new Error('Cards have no color in them');
