@@ -5,7 +5,12 @@ const ArrayUtils = require('../../Utilities/Array');
 const CardUtils = require('./Utils');
 
 class CardDeck {
+  /**
+   * @constructor
+   * @param {Card[]} [cardsArray]
+   */
   constructor(cardsArray) {
+    /** @type {Card[]} */
     this.cardsArray = CardDeck._generateDeckCards();
     if (cardsArray) this.cardsArray = cardsArray;
   }
@@ -25,7 +30,7 @@ class CardDeck {
   }
 
   /**
-   * @param {Number} iter Number of times to shuffle the cards
+   * @param {Number} iter Number of times to shuffle the cards. Range [1,50]
    * @returns {CardDeck}
    */
   shuffle(iter = 1) {
