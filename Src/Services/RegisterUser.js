@@ -14,7 +14,7 @@ async function handleContactMessage(msg) {
     phoneNumber: msg.contact.phone_number,
     username: msg.chat.username,
   })
-    .then(_ => bot.sendMessage(msg.chat.id, reply))
+    .then(_ => bot.sendMessage(msg.chat.id, reply, { reply_markup: { remove_keyboard: true } }))
     .catch(err => {
       if (err.code === 11000) {
         return bot.sendMessage(msg.chat.id, 'You have already registered.');
