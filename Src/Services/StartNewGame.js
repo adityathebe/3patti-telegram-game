@@ -2,6 +2,7 @@
 const bot = require('../bot');
 
 const GameDB = require('../Database/Game');
+const CardDeck = require('../Core/Cards/CardDeck');
 
 bot.on('callback_query', async query => {
   const payload = query.data;
@@ -42,4 +43,10 @@ bot.on('callback_query', async query => {
   bot.answerCallbackQuery({ callback_query_id: query.id });
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
   bot.sendMessage(query.message.chat.id, '**Game has started**', { parse_mode: 'Markdown' });
+
+  const cardDeck = new CardDeck();
+  const cards = cardDeck.distribute(gameData.initialParticipants.length);
+  gameData.initialParticipants.forEach((participant, idx) => {
+    bot.sendMessage(participant, cards[idx].map(x => cardDeck.formatCard(x)).join(' '));
+  });
 });
