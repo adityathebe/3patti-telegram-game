@@ -3,6 +3,7 @@ const bot = require('../bot');
 
 const GameDB = require('../Database/Game');
 const UserDB = require('../Database/User');
+const { USERNAME_TG } = require('../config');
 const { GAME_CREATED_MSG } = require('../constants');
 
 bot.on('callback_query', async query => {
@@ -39,6 +40,7 @@ bot.on('callback_query', async query => {
     reply_markup: {
       inline_keyboard: [
         [{ text: 'Join', callback_data: payload }, { text: 'Start', callback_data: `START-GAME-${gameId}` }],
+        [{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }],
       ],
     },
   });

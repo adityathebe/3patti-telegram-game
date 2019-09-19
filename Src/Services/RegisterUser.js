@@ -4,6 +4,7 @@ const bot = require('../bot');
 const UserDB = require('../Database/User');
 
 bot.onText(/\/register$/, handleUserRegisteration);
+bot.onText(/\/start register$/, handleUserRegisteration);
 bot.on('contact', handleContactMessage);
 
 async function handleContactMessage(msg) {
@@ -48,8 +49,5 @@ async function handleUserRegisteration(msg) {
     one_time_keyboard: true,
   };
 
-  return bot
-    .sendMessage(msg.chat.id, registerationMsg, { reply_markup: inlineMarkup })
-    .then(_ => console.log('Msg sent'))
-    .catch(console.error);
+  return bot.sendMessage(msg.chat.id, registerationMsg, { reply_markup: inlineMarkup }).catch(console.error);
 }

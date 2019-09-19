@@ -24,12 +24,21 @@ bot.on('callback_query', async query => {
     return bot.answerCallbackQuery({
       callback_query_id: query.id,
       text: 'Baatho hunchhas !',
+      cache_time: 60,
+    });
+  }
+
+  // Game must have at least 2 memebers
+  if (gameData.initialParticipants.length < 2) {
+    return bot.answerCallbackQuery({
+      callback_query_id: query.id,
+      text: 'Cannot start a game with less than 2 users',
+      show_alert: true,
     });
   }
 
   // Start game
-  const gameUpdateResponse = await GameDB.updateGame(gameId, { status: 'active' });
-  console.log(gameUpdateResponse);
+  await GameDB.updateGame(gameId, { status: 'active' });
   bot.answerCallbackQuery({ callback_query_id: query.id });
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
   bot.sendMessage(query.message.chat.id, '**Game has started**', { parse_mode: 'Markdown' });

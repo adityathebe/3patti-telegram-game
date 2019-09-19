@@ -10,8 +10,7 @@ GREETING_MSG += '\n**Hybrid Commands:**\n';
 GREETING_MSG += '/cards - Distribute cards\n';
 
 let GAME_CREATED_MSG = '**New game created**';
-GAME_CREATED_MSG += '\n\nTo join the game a user must be registered.';
-GAME_CREATED_MSG += '\n\nMessage @tinpattibot to register';
+GAME_CREATED_MSG += '\n\n_Please make sure you register first._';
 
 module.exports = {
   GREETING_MSG,

@@ -43,7 +43,7 @@ bot.onText(/Delete Account$/, async msg => {
   bot.sendMessage(msg.from.id, 'Are you sure ?', {
     reply_markup: {
       inline_keyboard: [
-        [{ text: 'Yes', callback_data: `DELETE-ACCOUNT-YES` }, { text: 'No', callback_data: `DELETE-ACCOUNT-NO` }],
+        [{ text: 'No', callback_data: `DELETE-ACCOUNT-NO` }, { text: 'Yes', callback_data: `DELETE-ACCOUNT-YES` }],
       ],
     },
   });
@@ -60,7 +60,7 @@ bot.on('callback_query', async query => {
       reply_markup: { remove_keyboard: true },
     });
   }
-  
+
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
   bot.answerCallbackQuery(query.id);
 });

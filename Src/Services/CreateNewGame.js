@@ -15,8 +15,12 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
   // Check if user is already registtered
   const doc = await UserDB.findUser(msg.from.id.toString());
   if (doc === null) {
-    return bot.sendMessage(msg.chat.id, 'Please register first. Send /register in private message', {
+    const replyMarkup = {
+      inline_keyboard: [[{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }]],
+    };
+    return bot.sendMessage(msg.chat.id, 'You cannot create a game without registering', {
       reply_to_message_id: msg.message_id,
+      reply_markup: replyMarkup,
     });
   }
 
@@ -35,6 +39,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
         { text: 'Join', callback_data: `JOIN-GAME-${dbResponse._id}` },
         { text: 'Start', callback_data: `START-GAME-${dbResponse._id}` },
       ],
+      [{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }],
     ],
   };
   await bot.sendMessage(msg.chat.id, gameInfo, {
