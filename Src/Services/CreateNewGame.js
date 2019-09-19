@@ -4,7 +4,12 @@ const bot = require('../bot');
 const UserDB = require('../Database/User');
 const GameDb = require('../Database/Game');
 
-bot.onText(/\/createGame$/, async (msg, match) => {
+bot.onText(/\/creategame$/, async (msg, match) => {
+  // Only on group
+  if (msg.chat.type === 'private') {
+    return bot.sendMessage(msg.chat.id, 'This command only works on groups');
+  }
+
   // Check if user is already registtered
   const doc = await UserDB.findUser(msg.from.id.toString());
   if (doc === null) {
@@ -34,6 +39,6 @@ bot.onText(/\/createGame$/, async (msg, match) => {
   };
   await bot.sendMessage(msg.chat.id, gameInfo, {
     reply_markup: replyMarkup,
-    reply_to_message_id: msg.message_id
+    reply_to_message_id: msg.message_id,
   });
 });
