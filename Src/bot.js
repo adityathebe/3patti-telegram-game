@@ -16,10 +16,11 @@ if (require.main === module) {
   });
 
   // Register services
-  require('./Services/RegisterUser');
-  require('./Services/GetCard');
-  require('./Services/CreateNewGame');
-  require('./Services/Settings');
   require('./Services/Wallet');
+  require('./Services/GetCard');
+  require('./Services/Settings');
   require('./Services/JoinGame');
+  require('./Services/RegisterUser');
+  require('./Services/StartNewGame');
+  require('./Services/CreateNewGame');
 }

@@ -30,10 +30,8 @@ bot.onText(/\/creategame$/, async (msg, match) => {
   const replyMarkup = {
     inline_keyboard: [
       [
-        {
-          text: 'Join',
-          callback_data: `JOIN-GAME-${dbResponse._id}`,
-        },
+        { text: 'Join', callback_data: `JOIN-GAME-${dbResponse._id}` },
+        { text: 'Start', callback_data: `START-GAME-${dbResponse._id}` },
       ],
     ],
   };
