@@ -1,11 +1,9 @@
 // @ts-check
-const MyTelegramBot = require('simple-telegram-bot-api');
-
 const bot = require('../bot');
 
 const UserDB = require('../Database/User');
 
-bot.onText(/\/register/, handleUserRegisteration);
+bot.onText(/\/register$/, handleUserRegisteration);
 bot.on('contact', handleContactMessage);
 
 async function handleContactMessage(msg, match) {
