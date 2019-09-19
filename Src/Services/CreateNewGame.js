@@ -1,9 +1,10 @@
 // @ts-check
 const bot = require('../bot');
-const { USERNAME_TG } = require('../config')
+const { USERNAME_TG } = require('../config');
 
 const UserDB = require('../Database/User');
 const GameDb = require('../Database/Game');
+const { GAME_CREATED_MSG } = require('../constants');
 
 bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (msg, match) => {
   // Only on group
@@ -27,7 +28,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
     initialParticipants: [authorId],
   });
 
-  const gameInfo = 'Join the Game.\nCurrent Participants: 1';
+  const gameInfo = GAME_CREATED_MSG + '\n\nCurrent Participants: 1';
   const replyMarkup = {
     inline_keyboard: [
       [
@@ -39,5 +40,6 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
   await bot.sendMessage(msg.chat.id, gameInfo, {
     reply_markup: replyMarkup,
     reply_to_message_id: msg.message_id,
+    parse_mode: 'Markdown',
   });
 });

@@ -3,6 +3,7 @@ const bot = require('../bot');
 
 const GameDB = require('../Database/Game');
 const UserDB = require('../Database/User');
+const { GAME_CREATED_MSG } = require('../constants');
 
 bot.on('callback_query', async query => {
   const payload = query.data;
@@ -30,10 +31,11 @@ bot.on('callback_query', async query => {
     return bot.answerCallbackQuery({ callback_query_id: query.id, text: 'You have already joined the game' });
   }
 
-  const editedText = `Join the Game.\nCurrent Participants: ${gameData.initialParticipants.length + 1}`;
+  const editedText = `${GAME_CREATED_MSG}\n\nCurrent Participants: ${gameData.initialParticipants.length + 1}`;
   bot.editMessageText(editedText, {
-    message_id: query.message.message_id,
+    parse_mode: 'Markdown',
     chat_id: query.message.chat.id,
+    message_id: query.message.message_id,
     reply_markup: {
       inline_keyboard: [
         [{ text: 'Join', callback_data: payload }, { text: 'Start', callback_data: `START-GAME-${gameId}` }],
