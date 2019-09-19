@@ -1,10 +1,11 @@
 // @ts-check
 const bot = require('../bot');
+const { USERNAME_TG } = require('../config')
 
 const UserDB = require('../Database/User');
 const GameDb = require('../Database/Game');
 
-bot.onText(/\/creategame$/, async (msg, match) => {
+bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (msg, match) => {
   // Only on group
   if (msg.chat.type === 'private') {
     return bot.sendMessage(msg.chat.id, 'This command only works on groups');

@@ -1,9 +1,10 @@
 // @ts-check
 const bot = require('../bot');
-
+const { USERNAME_TG } = require('../config');
 const CardDeck = require('../Core/Cards/CardDeck');
 
-bot.onText(/(\/cards [2-9]|10)|(\/cards)$/, handleGetCard);
+bot.onText(new RegExp('(/cards [2-9]|10)|(/cards)$'), handleGetCard);
+bot.onText(new RegExp(`(/cards@${USERNAME_TG} [2-9]|10)|(\/cards@${USERNAME_TG})$`), handleGetCard);
 
 async function handleGetCard(msg, match) {
   const deck = new CardDeck();
