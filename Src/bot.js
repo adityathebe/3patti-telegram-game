@@ -18,4 +18,5 @@ if (require.main === module) {
   // Register services
   require('./Services/RegisterUser');
   require('./Services/GetCard');
+  require('./Services/CreateNewGame');
 }

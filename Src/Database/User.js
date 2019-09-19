@@ -1,7 +1,6 @@
 // @ts-check
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const UserModel = require('./Models/User');
-
 
 class UserDB {
   /**
@@ -28,6 +27,14 @@ class UserDB {
 
     const response = await newUser.save();
     return response;
+  }
+
+  /**
+   *
+   * @param {String} chatId
+   */
+  static async findUser(chatId) {
+    return await UserModel.findOne({ chatId });
   }
 }
 

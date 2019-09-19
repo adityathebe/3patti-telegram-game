@@ -7,11 +7,10 @@ bot.onText(/\/register$/, handleUserRegisteration);
 bot.on('contact', handleContactMessage);
 
 async function handleContactMessage(msg, match) {
-  const contact = msg.contact;
   const reply = `You have been registered. Hurray !`;
   UserDB.saveUser({
     chatId: msg.chat.id,
-    phoneNumber: contact.phone_number,
+    phoneNumber: msg.contact.phone_number,
     username: msg.chat.username,
   })
     .then(_ => bot.sendMessage(msg.chat.id, reply))
@@ -27,6 +26,19 @@ async function handleContactMessage(msg, match) {
  * @param {*} match
  */
 async function handleUserRegisteration(msg, match) {
+  if (msg.chat.type !== 'private') {
+    return bot.sendMessage(msg.chat.id, 'Please send this message in private', {
+      reply_to_message_id: msg.message_id,
+    });
+  }
+
+  const userInDb = await UserDB.findUser(msg.from.id.toString());
+  if (userInDb !== null) {
+    return bot.sendMessage(msg.chat.id, 'You have already registered', {
+      reply_to_message_id: msg.message_id,
+    });
+  }
+
   const registerationMsg = 'In order to register you will need to share your contact';
   const inlineMarkup = {
     keyboard: [
@@ -41,7 +53,7 @@ async function handleUserRegisteration(msg, match) {
     one_time_keyboard: true,
   };
 
-  bot
+  return bot
     .sendMessage(msg.chat.id, registerationMsg, { reply_markup: inlineMarkup })
     .then(_ => console.log('Msg sent'))
     .catch(console.error);
