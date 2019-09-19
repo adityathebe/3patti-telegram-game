@@ -9,13 +9,14 @@ bot.onText(/\/settings$/, async msg => {
   if (userInDb === null) {
     return bot.sendMessage(msg.chat.id, 'Please /register first');
   }
-  let response = '';
+
+  let response = 'User Settings';
   const replyKeyboardMarkup = {
-    keyboard: [[{ text: 'Profile' }, { text: 'Wallet' }]],
+    keyboard: [[{ text: 'Profile' }, { text: 'Wallet' }], [{ text: 'Delete Account' }]],
     resize_keyboard: true,
     one_time_keyboard: false,
   };
-  bot.sendMessage(msg.chat.id, 'Settings ...', {
+  bot.sendMessage(msg.chat.id, response, {
     reply_markup: replyKeyboardMarkup,
   });
 });
@@ -34,4 +35,12 @@ bot.onText(/Profile$/, async msg => {
     day: '2-digit',
   })}`;
   bot.sendMessage(msg.chat.id, response);
+});
+
+bot.onText(/Delete Account$/, async msg => {
+  if (msg.chat.type !== 'private') return;
+
+  const userInDb = await UserDB.deleteUser(msg.from.id.toString());
+  console.log(userInDb);
+  bot.sendMessage(msg.chat.id, 'response');
 });

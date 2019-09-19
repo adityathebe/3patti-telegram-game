@@ -38,6 +38,11 @@ class UserDB {
     const user = await UserModel.findOne({ chatId });
     return user ? user.toObject() : null;
   }
+
+  static async deleteUser(chatId) {
+    const removedUser = await UserModel.findOneAndDelete({ chatId });
+    return removedUser;
+  }
 }
 
 module.exports = UserDB;
