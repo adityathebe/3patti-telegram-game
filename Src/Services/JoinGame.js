@@ -24,7 +24,7 @@ bot.on('callback_query', async query => {
     ]);
   }
 
-  const response = await GameDB.addParticipant(gameId, query.from.id);
+  const response = await GameDB.addParticipant(gameId, query.from.id.toString());
   // If user has already joined the game
   if (response.nModified === 0) {
     return bot.answerCallbackQuery({ callback_query_id: query.id, text: 'You have already joined the game' });

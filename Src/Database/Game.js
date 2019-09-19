@@ -35,8 +35,27 @@ class GameDB {
     return user ? user.toObject() : null;
   }
 
+  /**
+   * @param {String} gameId 
+   * @param {String} participantId 
+   */
   static async addParticipant(gameId, participantId) {
     const response = await GameModel.update({ _id: gameId }, { $addToSet: { initialParticipants: participantId } });
+    return response;
+  }
+
+  /**
+   * @typedef GameUpdate
+   * @property {Number} [playersCount]
+   * @property {String} [status]
+   * @property {String[]} [initialParticipants]
+   *
+   * @param {String} gameId
+   * @param {GameUpdate} gameData
+   */
+  static async updateGame(gameId, gameData) {
+    // @ts-ignore
+    const response = await GameModel.findOneAndUpdate({ _id: gameId }, gameData, { returnOriginal: false });
     return response;
   }
 }

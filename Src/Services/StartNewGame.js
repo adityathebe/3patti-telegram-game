@@ -27,6 +27,9 @@ bot.on('callback_query', async query => {
     });
   }
 
+  // Start game
+  const gameUpdateResponse = await GameDB.updateGame(gameId, { status: 'active' });
+  console.log(gameUpdateResponse);
   bot.answerCallbackQuery({ callback_query_id: query.id });
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
   bot.sendMessage(query.message.chat.id, '**La game suru**', { parse_mode: 'Markdown' });
