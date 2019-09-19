@@ -32,9 +32,11 @@ class UserDB {
   /**
    *
    * @param {String} chatId
+   * @return {Promise<User>}
    */
   static async findUser(chatId) {
-    return await UserModel.findOne({ chatId });
+    const user = await UserModel.findOne({ chatId });
+    return user ? user.toObject() : null;
   }
 }
 
