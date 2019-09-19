@@ -22,6 +22,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "mongoose": "^5.7.1",
+    "node-telegram-bot-api": "^0.30.0",
     "simple-telegram-bot-api": "^0.0.7"
   }
 }
