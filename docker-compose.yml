@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  telegram-bot:
+    container_name: 3patti_tg_bot
+    build: './Src'
+    image: '3-patti-telegram-bot'
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_HOST_URI: mongodb://mongodb_database:27017/
+      MONGO_DB_NAME: 3patti
+    volumes:
+      - ./Src:/usr/src/3-patti-telegeram/
+
+  mongodb:
+    container_name: mongodb_database
+    image: 'mongo:4.2.0'
+    volumes:
+      - './mongo-data:/data/db'

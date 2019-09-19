@@ -3,17 +3,25 @@ const MyTelegramBot = require('simple-telegram-bot-api');
 
 const bot = require('../bot');
 
-bot.sendMessage('451722605', 'hey');
+const UserDB = require('../Database/User');
+
 bot.onText(/\/register/, handleUserRegisteration);
 bot.on('contact', handleContactMessage);
 
 async function handleContactMessage(msg, match) {
   const contact = msg.contact;
-  const reply = `Phone : ${contact.phone_number}`;
-  bot
-    .sendMessage(msg.chat.id, reply)
-    .then(_ => console.log('Msg sent'))
-    .catch(console.error);
+  const reply = `You have been registered. Hurray !`;
+  UserDB.saveUser({
+    chatId: msg.chat.id,
+    phoneNumber: contact.phone_number,
+    username: msg.chat.username,
+  })
+    .then(_ => bot.sendMessage(msg.chat.id, reply))
+    .catch(err => {
+      if (err.code === 11000) {
+        return bot.sendMessage(msg.chat.id, 'You have already registered.');
+      }
+    });
 }
 
 /**
@@ -21,17 +29,22 @@ async function handleContactMessage(msg, match) {
  * @param {*} match
  */
 async function handleUserRegisteration(msg, match) {
-  const registerationMsg = 'In order to register, you will need to share your contact';
-  const keyboardMarkup = MyTelegramBot.makeReplyKeyboardMarkup([
-    [
-      {
-        text: 'Share Contact',
-        request_contact: true,
-      },
+  const registerationMsg = 'In order to register you will need to share your contact';
+  const inlineMarkup = {
+    keyboard: [
+      [
+        {
+          text: 'Share Contact',
+          request_contact: true,
+        },
+      ],
     ],
-  ]);
+    resize_keyboard: true,
+    one_time_keyboard: true,
+  };
+
   bot
-    .sendMessage(msg.chat.id, registerationMsg, { reply_markup: keyboardMarkup })
+    .sendMessage(msg.chat.id, registerationMsg, { reply_markup: inlineMarkup })
     .then(_ => console.log('Msg sent'))
     .catch(console.error);
 }

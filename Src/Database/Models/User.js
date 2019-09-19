@@ -6,6 +6,7 @@ let userSchema = mongoose.Schema({
   firstName: { type: String, required: false },
   lastName: { type: String, required: false },
   registered: { type: Date, default: () => Date.now() },
+  phoneNumber: { type: String, required: true },
 });
 
 module.exports = mongoose.model('User', userSchema);
