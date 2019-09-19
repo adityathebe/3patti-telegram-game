@@ -40,7 +40,27 @@ bot.onText(/Profile$/, async msg => {
 bot.onText(/Delete Account$/, async msg => {
   if (msg.chat.type !== 'private') return;
 
-  const userInDb = await UserDB.deleteUser(msg.from.id.toString());
-  console.log(userInDb);
-  bot.sendMessage(msg.chat.id, 'response');
+  bot.sendMessage(msg.from.id, 'Are you sure ?', {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: 'Yes', callback_data: `DELETE-ACCOUNT-YES` }, { text: 'No', callback_data: `DELETE-ACCOUNT-NO` }],
+      ],
+    },
+  });
+});
+
+bot.on('callback_query', async query => {
+  const payload = query.data;
+  if (payload.indexOf('DELETE-ACCOUNT-') !== 0) return;
+  const userSelected = payload.replace('DELETE-ACCOUNT-', '');
+
+  if (userSelected === 'YES') {
+    await UserDB.deleteUser(query.from.id.toString());
+    bot.sendMessage(query.message.chat.id, 'Your account has been deleted', {
+      reply_markup: { remove_keyboard: true },
+    });
+  }
+  
+  bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
+  bot.answerCallbackQuery(query.id);
 });
