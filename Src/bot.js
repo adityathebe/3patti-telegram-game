@@ -21,4 +21,5 @@ if (require.main === module) {
   require('./Services/CreateNewGame');
   require('./Services/Settings');
   require('./Services/Wallet');
+  require('./Services/JoinGame');
 }

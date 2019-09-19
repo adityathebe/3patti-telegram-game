@@ -2,6 +2,7 @@
 const bot = require('../bot');
 
 const UserDB = require('../Database/User');
+const GameDb = require('../Database/Game');
 
 bot.onText(/\/createGame$/, async (msg, match) => {
   // Check if user is already registtered
@@ -12,6 +13,27 @@ bot.onText(/\/createGame$/, async (msg, match) => {
     });
   }
 
-  const author = msg.from.id;
-  const groupId = msg.chat.id;
+  const authorId = msg.from.id.toString();
+  const groupId = msg.chat.id.toString();
+  const dbResponse = await GameDb.saveGame({
+    authorId,
+    groupId,
+    initialParticipants: [authorId],
+  });
+
+  const gameInfo = 'Join the Game.\nCurrent Participants: 1';
+  const replyMarkup = {
+    inline_keyboard: [
+      [
+        {
+          text: 'Join',
+          callback_data: `JOIN-GAME-${dbResponse._id}`,
+        },
+      ],
+    ],
+  };
+  await bot.sendMessage(msg.chat.id, gameInfo, {
+    reply_markup: replyMarkup,
+    reply_to_message_id: msg.message_id
+  });
 });

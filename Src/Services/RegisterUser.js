@@ -6,7 +6,7 @@ const UserDB = require('../Database/User');
 bot.onText(/\/register$/, handleUserRegisteration);
 bot.on('contact', handleContactMessage);
 
-async function handleContactMessage(msg, match) {
+async function handleContactMessage(msg) {
   const reply = `You have been registered. Hurray !`;
   UserDB.saveUser({
     chatId: msg.chat.id,
@@ -23,14 +23,9 @@ async function handleContactMessage(msg, match) {
 
 /**
  * @param {*} msg
- * @param {*} match
  */
-async function handleUserRegisteration(msg, match) {
-  if (msg.chat.type !== 'private') {
-    return bot.sendMessage(msg.chat.id, 'Please send this message in private', {
-      reply_to_message_id: msg.message_id,
-    });
-  }
+async function handleUserRegisteration(msg) {
+  if (msg.chat.type !== 'private') return;
 
   const userInDb = await UserDB.findUser(msg.from.id.toString());
   if (userInDb !== null) {
