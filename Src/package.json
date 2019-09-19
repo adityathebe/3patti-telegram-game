@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node bot.js",
     "test": "NODE_ENV=test mocha __Tests__/*.test.js",
-    "dev": "nodemon bot.js"
+    "dev": "./node_modules/nodemon/bin/nodemon.js bot.js"
   },
   "repository": {
     "type": "git",
