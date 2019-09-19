@@ -1,6 +1,7 @@
 // @ts-check
 const TelegramBot = require('node-telegram-bot-api');
 
+const { GREETING_MSG } = require('./constants');
 const { APIKEY_TG } = require('./config');
 const Database = require('./Database/index');
 
@@ -16,18 +17,30 @@ if (require.main === module) {
   });
 
   // Greeting Message
-  let greetingMsg = '**Private Commands:**\n';
-  greetingMsg += '/register - Register with mobile\n';
-  greetingMsg += '/wallet - Wallet options\n';
-  greetingMsg += '/settings - Private options\n';
-  greetingMsg += '\n**Group Commands:**\n';
-  greetingMsg += '/creategame - Private options\n';
-  greetingMsg += '\n**Hybrid Commands:**\n';
-  greetingMsg += '/cards - Distribute cards\n';
-
   bot.onText(/\/start$/, async msg => {
     if (msg.chat.type !== 'private') return;
-    bot.sendMessage(msg.chat.id, greetingMsg, { parse_mode: 'Markdown', reply_markup: { remove_keyboard: true } });
+    bot.sendMessage(msg.chat.id, GREETING_MSG, {
+      parse_mode: 'Markdown',
+      reply_markup: { remove_keyboard: true },
+    });
+  });
+
+  /////////////
+  // Logging //
+  /////////////
+  bot.on('text', async msg => {
+    const from = msg.from.username || msg.from.first_name;
+    console.log(
+      '[' + new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kathmandu' }) + '] ' + from + ' ' + msg.text
+    );
+  });
+
+  bot.on('polling_error', console.error);
+
+  bot.on('new_chat_members', msg => {
+    const group = msg.chat.title;
+    const newMember = msg.new_chat_members.map(x => x.username || x.first_name);
+    console.log(`New Member :: ${group} ${newMember}`);
   });
 
   // Register services

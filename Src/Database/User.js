@@ -1,5 +1,4 @@
 // @ts-check
-const mongoose = require('mongoose');
 const UserModel = require('./Models/User');
 
 class UserDB {
@@ -13,7 +12,7 @@ class UserDB {
    * @property {String} [registered]
    *
    * @param {User} userData
-   * @returns {Promise<mongoose.MongooseDocument>}
+   * @returns {Promise<User>}
    */
   static async saveUser(userData) {
     const newUser = new UserModel({
@@ -26,7 +25,7 @@ class UserDB {
     });
 
     const response = await newUser.save();
-    return response;
+    return response.toObject();
   }
 
   /**

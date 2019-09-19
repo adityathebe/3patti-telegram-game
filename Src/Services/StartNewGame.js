@@ -32,5 +32,5 @@ bot.on('callback_query', async query => {
   console.log(gameUpdateResponse);
   bot.answerCallbackQuery({ callback_query_id: query.id });
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
-  bot.sendMessage(query.message.chat.id, '**La game suru**', { parse_mode: 'Markdown' });
+  bot.sendMessage(query.message.chat.id, '**Game has started**', { parse_mode: 'Markdown' });
 });
