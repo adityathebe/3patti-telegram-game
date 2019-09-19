@@ -1,4 +1,4 @@
-FROM node:lts-jessie
+FROM node:10.16.3-jessie
 
 RUN apt-get update 
 
@@ -10,4 +10,4 @@ RUN npm install
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
