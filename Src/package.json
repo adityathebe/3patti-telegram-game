@@ -5,7 +5,8 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
-    "test": "NODE_ENV=test mocha __Tests__/*.test.js"
+    "test": "NODE_ENV=test mocha __Tests__/*.test.js",
+    "dev": "nodemon bot.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,8 @@
     "mongoose": "^5.7.1",
     "node-telegram-bot-api": "^0.30.0",
     "simple-telegram-bot-api": "^0.0.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
   }
 }
