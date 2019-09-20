@@ -14,8 +14,7 @@ bot.on('callback_query', async query => {
   // User must be registered
   const userInDb = await UserDB.findUser(query.from.id.toString());
   if (!userInDb) {
-    return bot.answerCallbackQuery({
-      callback_query_id: query.id,
+    return bot.answerCallbackQuery(query.id, {
       text: 'Please register first',
     });
   }
@@ -23,8 +22,7 @@ bot.on('callback_query', async query => {
   // The game must exist
   if (gameData === null) {
     bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
-    bot.answerCallbackQuery({
-      callback_query_id: query.id,
+    bot.answerCallbackQuery(query.id, {
       text: 'Sorry, the game does not exist',
     });
     return;
@@ -32,8 +30,7 @@ bot.on('callback_query', async query => {
 
   // User must be the author of the game
   if (gameData.authorId !== query.from.id.toString()) {
-    return bot.answerCallbackQuery({
-      callback_query_id: query.id,
+    return bot.answerCallbackQuery(query.id, {
       text: 'This action can only be initiated by the author of the game',
       show_alert: true,
       cache_time: 60,
@@ -42,8 +39,7 @@ bot.on('callback_query', async query => {
 
   // Game must have at least 2 memebers
   if (gameData.initialParticipants.length < 2) {
-    return bot.answerCallbackQuery({
-      callback_query_id: query.id,
+    return bot.answerCallbackQuery(query.id, {
       text: 'Cannot start a game with less than 2 users',
       show_alert: true,
     });
@@ -51,7 +47,7 @@ bot.on('callback_query', async query => {
 
   // Start game
   await GameDB.updateGame(gameId, { status: 'active' });
-  bot.answerCallbackQuery({ callback_query_id: query.id });
+  bot.answerCallbackQuery(query.id);
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
   bot.sendMessage(query.message.chat.id, '**Game has started**', {
     parse_mode: 'Markdown',
