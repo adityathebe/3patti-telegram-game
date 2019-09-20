@@ -1,3 +1,4 @@
+// @ts-check
 const Card = require('./Card');
 
 class CardHand {
@@ -15,10 +16,12 @@ class CardHand {
     }
 
     for (const card of cards) {
-      if (card instanceof Card) continue;
-      throw new TypeError('Every element in the `cards` must be an instance of Card');
+      if (card instanceof Card === false) {
+        throw new TypeError('Every element in `cards` must be an instance of Card');
+      }
     }
 
+    // To-do
     // All cards must be unique
 
     this.cards = cards;
@@ -32,6 +35,10 @@ class CardHand {
 
   getSuits() {
     return this.cards.map(card => card.suit);
+  }
+
+  format() {
+    return this.cards.map(card => card.formatCard()).join(' ');
   }
 }
 

@@ -54,8 +54,8 @@ bot.on('callback_query', async query => {
   });
 
   const cardDeck = new CardDeck();
-  const cards = cardDeck.distribute(gameData.initialParticipants.length);
+  const cardHands = cardDeck.distribute(gameData.initialParticipants.length);
   gameData.initialParticipants.forEach((participant, idx) => {
-    bot.sendMessage(participant, cards[idx].map(x => cardDeck.formatCard(x)).join(' '));
+    bot.sendMessage(participant, cardHands[idx].format());
   });
 });

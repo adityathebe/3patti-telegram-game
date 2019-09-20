@@ -1,8 +1,8 @@
 // @ts-check
 const Card = require('./Card');
+const CardHand = require('./CardHand');
 
 const ArrayUtils = require('../../Utilities/Array');
-const CardUtils = require('./Utils');
 
 class CardDeck {
   /**
@@ -10,9 +10,19 @@ class CardDeck {
    * @param {Card[]} [cardsArray]
    */
   constructor(cardsArray) {
-    /** @type {Card[]} */
     this.cardsArray = CardDeck._generateDeckCards();
-    if (cardsArray) this.cardsArray = cardsArray;
+    if (cardsArray) {
+      if (cardsArray instanceof Array === false) {
+        throw new TypeError('`cardsArray` must be an Array');
+      }
+
+      for (const card of cardsArray) {
+        if (card instanceof Card === false) {
+          throw new TypeError('Every element in `cardsArray` must be of type Card');
+        }
+      }
+      this.cardsArray = cardsArray;
+    }
   }
 
   /**
@@ -60,35 +70,26 @@ class CardDeck {
   _popRandom() {
     if (this.cardsArray.length < 1) throw new Error('No cards left in the deck');
     this.shuffle();
-    return this.cardsArray.pop();
-  }
-
-  /**
-   * @param {Card} card
-   * @returns {String}
-   */
-  formatCard(card) {
-    const cardSuit = CardUtils.suitsMap[card.suit];
-    let cardValue = CardUtils.valueMap[card.value];
-    cardValue = cardValue ? cardValue : card.value;
-    return `${cardValue}${cardSuit}`;
+    const randomCard = this.cardsArray.pop();
+    return randomCard;
   }
 
   /**
    * @param {Number} numPlayers
-   * @returns {Card[][]}
+   * @returns {CardHand[]}
    */
   distribute(numPlayers) {
     if (numPlayers * 3 > 52) throw new Error('Players count exceeded');
-    const cards = [];
+    const cardHands = [];
     for (let i = 0; i < numPlayers; i += 1) {
       const oneHand = [];
       for (let j = 0; j < 3; j += 1) {
-        oneHand.push(this._popRandom());
+        const randomCard = this._popRandom();
+        oneHand.push(randomCard);
       }
-      cards.push(oneHand);
+      cardHands.push(new CardHand(oneHand));
     }
-    return cards;
+    return cardHands;
   }
 }
 
