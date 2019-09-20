@@ -45,7 +45,11 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
     inline_keyboard: [
       [
         { text: 'Join', callback_data: `JOIN-GAME-${dbResponse._id}` },
+        { text: 'Leave', callback_data: `LEAVE-GAME-${dbResponse._id}` },
+      ],
+      [
         { text: 'Start', callback_data: `START-GAME-${dbResponse._id}` },
+        { text: 'Delete', callback_data: `DELETE-GAME-${dbResponse._id}` },
       ],
       [{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }],
     ],

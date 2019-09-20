@@ -39,7 +39,14 @@ bot.on('callback_query', async query => {
     message_id: query.message.message_id,
     reply_markup: {
       inline_keyboard: [
-        [{ text: 'Join', callback_data: payload }, { text: 'Start', callback_data: `START-GAME-${gameId}` }],
+        [
+          { text: 'Join', callback_data: `JOIN-GAME-${gameId}` },
+          { text: 'Leave', callback_data: `LEAVE-GAME-${gameId}` },
+        ],
+        [
+          { text: 'Start', callback_data: `START-GAME-${gameId}` },
+          { text: 'Delete', callback_data: `DELETE-GAME-${gameId}` },
+        ],
         [{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }],
       ],
     },
