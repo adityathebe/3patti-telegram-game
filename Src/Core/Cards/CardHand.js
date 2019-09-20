@@ -21,8 +21,12 @@ class CardHand {
       }
     }
 
-    // To-do
     // All cards must be unique
+    const cardsStr = cards.map(card => card.formatCard());
+    const duplicates = cards.filter((card, idx) => cardsStr.indexOf(card.formatCard()) !== idx);
+    if (duplicates.length > 0) {
+      throw new Error('Duplicate cards');
+    }
 
     this.cards = cards;
   }
