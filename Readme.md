@@ -1,3 +1,7 @@
+# TinPatti Multiplayer Telegram Game
+
+[![Build Status](https://travis-ci.org/adityathebe/3patti-telegram-game.svg?branch=master)](https://travis-ci.org/adityathebe/3patti-telegram-game)
+
 ### Commands
 
 ```
