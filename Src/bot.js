@@ -11,10 +11,15 @@ module.exports = bot;
 
 // @ts-ignore
 if (require.main === module) {
-  Database.connect().then(_ => {
-    bot.startPolling();
-    console.log('Connected to database');
-  });
+  Database.connect()
+    .then(_ => {
+      console.log('Connected to database');
+      return bot.startPolling();
+    })
+    .catch(err => {
+      console.error('Failed to connect to database');
+      process.exit(0);
+    });
 
   // Greeting Message
   bot.onText(/\/start$/, async msg => {
@@ -30,9 +35,17 @@ if (require.main === module) {
   /////////////
   bot.on('text', async msg => {
     const from = msg.from.username || msg.from.first_name;
-    console.log(
-      '[' + new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kathmandu' }) + '] ' + from + ' ' + msg.text
-    );
+    const chatType = msg.chat.type;
+    const time = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kathmandu' });
+    console.log(`[${time}] [${chatType}] ${from} => ${msg.text}`);
+  });
+
+  bot.on('callback_query', async query => {
+    const msg = query.message;
+    const from = query.from.username || query.from.first_name;
+    const chatType = msg.chat.type;
+    const time = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Kathmandu' });
+    console.log(`[${time}] [${chatType}] [Callback] ${from} => ${query.data}`);
   });
 
   bot.on('polling_error', console.error);
@@ -43,7 +56,9 @@ if (require.main === module) {
     console.log(`New Member :: ${group} ${newMember}`);
   });
 
-  // Register services
+  ///////////////////////
+  // Register services //
+  ///////////////////////
   require('./Services/Wallet');
   require('./Services/GetCard');
   require('./Services/Settings');
