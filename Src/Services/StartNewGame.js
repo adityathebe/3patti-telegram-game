@@ -1,6 +1,7 @@
 // @ts-check
 const bot = require('../bot');
 
+const UserDB = require('../Database/User');
 const GameDB = require('../Database/Game');
 const CardDeck = require('../Core/Cards/CardDeck');
 
@@ -9,6 +10,15 @@ bot.on('callback_query', async query => {
   if (payload.indexOf('START-GAME-') !== 0) return;
   const gameId = payload.replace('START-GAME-', '');
   const gameData = await GameDB.findGame(gameId);
+
+  // User must be registered
+  const userInDb = await UserDB.findUser(query.from.id.toString());
+  if (!userInDb) {
+    return bot.answerCallbackQuery({
+      callback_query_id: query.id,
+      text: 'Please register first',
+    });
+  }
 
   // The game must exist
   if (gameData === null) {
@@ -24,7 +34,8 @@ bot.on('callback_query', async query => {
   if (gameData.authorId !== query.from.id.toString()) {
     return bot.answerCallbackQuery({
       callback_query_id: query.id,
-      text: 'Baatho hunchhas !',
+      text: 'This action can only be initiated by the author of the game',
+      show_alert: true,
       cache_time: 60,
     });
   }
@@ -42,7 +53,9 @@ bot.on('callback_query', async query => {
   await GameDB.updateGame(gameId, { status: 'active' });
   bot.answerCallbackQuery({ callback_query_id: query.id });
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
-  bot.sendMessage(query.message.chat.id, '**Game has started**', { parse_mode: 'Markdown' });
+  bot.sendMessage(query.message.chat.id, '**Game has started**', {
+    parse_mode: 'Markdown',
+  });
 
   const cardDeck = new CardDeck();
   const cards = cardDeck.distribute(gameData.initialParticipants.length);
