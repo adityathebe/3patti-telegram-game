@@ -5,10 +5,7 @@ node_js:
   - '9'
   - '8'
 dist: trust
-# cache:
-#   directories:
-#     - node_modules
-# install:
-#   - npm install
 script:
+  - cd Src/
+  - npm install --only=dev
   - npm run test
