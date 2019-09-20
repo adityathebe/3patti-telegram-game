@@ -9,31 +9,17 @@ describe('CardDeck Tests', () => {
   describe('Shuffle', () => {
     const deck = new CardDeck();
     it('should shuffle', () => {
-      const before = {
-        firstCard: deck.cardsArray[0],
-        lastCard: deck.cardsArray[51],
-      };
+      const beforeShuffle = deck.cardsArray.map(card => card.formatCard());
       deck.shuffle();
-      const after = {
-        firstCard: deck.cardsArray[0],
-        lastCard: deck.cardsArray[51],
-      };
-      expect(before.firstCard.value).to.not.equal(after.firstCard.value);
-      expect(before.lastCard.value).to.not.equal(after.lastCard.value);
+      const afterShuffle = deck.cardsArray.map(card => card.formatCard());
+      expect(beforeShuffle).to.not.equal(afterShuffle);
     });
 
     it('should shuffle 10 times', () => {
-      const before = {
-        firstCard: deck.cardsArray[0],
-        lastCard: deck.cardsArray[51],
-      };
+      const beforeShuffle = deck.cardsArray.map(card => card.formatCard());
       deck.shuffle(10);
-      const after = {
-        firstCard: deck.cardsArray[0],
-        lastCard: deck.cardsArray[51],
-      };
-      expect(before.firstCard.value).to.not.equal(after.firstCard.value);
-      expect(before.lastCard.value).to.not.equal(after.lastCard.value);
+      const afterShuffle = deck.cardsArray.map(card => card.formatCard());
+      expect(beforeShuffle).to.not.equal(afterShuffle);
     });
 
     it('should throw a RangeError if shuffle is passed with value outside [1,50]', () => {
