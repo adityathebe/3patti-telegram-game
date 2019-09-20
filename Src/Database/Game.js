@@ -45,6 +45,15 @@ class GameDB {
   }
 
   /**
+   * @param {String} gameId
+   * @param {String} participantId
+   */
+  static async removeParticipant(gameId, participantId) {
+    const response = await GameModel.update({ _id: gameId }, { $pull: { initialParticipants: participantId } });
+    return response;
+  }
+
+  /**
    * @typedef GameUpdate
    * @property {Number} [playersCount]
    * @property {String} [status]
@@ -62,6 +71,14 @@ class GameDB {
   static async getAllActiveGamesInGroup(groupId) {
     const response = await GameModel.find({ groupId, $or: [{ status: 'pending' }, { status: 'active' }] });
     return response.map(res => res.toObject());
+  }
+
+  /**
+   * @param {String} gameId
+   */
+  static async deleteGame(gameId) {
+    const response = await GameModel.findByIdAndDelete(gameId);
+    return response.toObject();
   }
 }
 

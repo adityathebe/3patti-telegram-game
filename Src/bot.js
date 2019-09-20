@@ -63,6 +63,7 @@ if (require.main === module) {
   require('./Services/GetCard');
   require('./Services/Settings');
   require('./Services/JoinGame');
+  require('./Services/DeleteGame');
   require('./Services/RegisterUser');
   require('./Services/StartNewGame');
   require('./Services/CreateNewGame');
