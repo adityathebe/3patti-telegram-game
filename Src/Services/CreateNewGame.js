@@ -24,12 +24,14 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
     });
   }
 
-  // Cannot create more than one game in a single group
+  // Cannot create more than one game in a single group by a single user
   const gamesInThisGroup = await GameDb.getAllActiveGamesInGroup(msg.chat.id);
   if (gamesInThisGroup.length > 0) {
-    return bot.sendMessage(msg.chat.id, 'Only one active game per group is allowed', {
-      reply_to_message_id: msg.message_id,
-    });
+    if (gamesInThisGroup.filter(game => game.authorId === msg.from.id.toString()).length > 0) {
+      return bot.sendMessage(msg.chat.id, 'You cannot create more than one game in the same group', {
+        reply_to_message_id: msg.message_id,
+      });
+    }
   }
 
   const authorId = msg.from.id.toString();
