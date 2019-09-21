@@ -5,6 +5,8 @@ const { GREETING_MSG } = require('./constants');
 const { APIKEY_TG } = require('./config');
 const Database = require('./Database/index');
 
+const AppError = require('./Utilities/ErrorHandler');
+
 const bot = new TelegramBot(APIKEY_TG, { polling: false });
 
 module.exports = bot;
@@ -17,7 +19,7 @@ if (require.main === module) {
       return bot.startPolling();
     })
     .catch(err => {
-      console.error('Failed to connect to database');
+      AppError.handle(err);
       process.exit(0);
     });
 
@@ -27,7 +29,7 @@ if (require.main === module) {
     bot.sendMessage(msg.chat.id, GREETING_MSG, {
       parse_mode: 'Markdown',
       reply_markup: { remove_keyboard: true },
-    });
+    }).catch(AppError.handle);
   });
 
   /////////////
@@ -48,7 +50,7 @@ if (require.main === module) {
     console.log(`[${time}] [${chatType}] [Callback] ${from} => ${query.data}`);
   });
 
-  bot.on('polling_error', console.error);
+  bot.on('polling_error', AppError.handle);
 
   bot.on('new_chat_members', msg => {
     const group = msg.chat.title;

@@ -6,10 +6,12 @@ const UserDB = require('../Database/User');
 const GameDb = require('../Database/Game');
 const { GAME_CREATED_MSG } = require('../constants');
 
-bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (msg, match) => {
+const AppError = require('../Utilities/ErrorHandler');
+
+bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg => {
   // Only on group
   if (msg.chat.type === 'private') {
-    return bot.sendMessage(msg.chat.id, 'This command only works on groups');
+    return bot.sendMessage('msg.chat.id', 'This command only works on groups').catch(AppError.handle);
   }
 
   // Check if user is registered
@@ -18,19 +20,23 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
     const replyMarkup = {
       inline_keyboard: [[{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }]],
     };
-    return bot.sendMessage(msg.chat.id, 'You cannot create a game without registering', {
-      reply_to_message_id: msg.message_id,
-      reply_markup: replyMarkup,
-    });
+    return bot
+      .sendMessage(msg.chat.id, 'You cannot create a game without registering', {
+        reply_to_message_id: msg.message_id,
+        reply_markup: replyMarkup,
+      })
+      .catch(AppError.handle);
   }
 
   // Cannot create more than one game in a single group by a single user
   const gamesInThisGroup = await GameDb.getAllActiveGamesInGroup(msg.chat.id);
   if (gamesInThisGroup.length > 0) {
     if (gamesInThisGroup.filter(game => game.authorId === msg.from.id.toString()).length > 0) {
-      return bot.sendMessage(msg.chat.id, 'You cannot create more than one game in the same group', {
-        reply_to_message_id: msg.message_id,
-      });
+      return bot
+        .sendMessage(msg.chat.id, 'You cannot create more than one game in the same group', {
+          reply_to_message_id: msg.message_id,
+        })
+        .catch(AppError.handle);
     }
   }
 
@@ -56,9 +62,12 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async (ms
       [{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }],
     ],
   };
-  await bot.sendMessage(msg.chat.id, gameInfo, {
-    reply_markup: replyMarkup,
-    reply_to_message_id: msg.message_id,
-    parse_mode: 'Markdown',
-  });
+
+  bot
+    .sendMessage(msg.chat.id, gameInfo, {
+      reply_markup: replyMarkup,
+      reply_to_message_id: msg.message_id,
+      parse_mode: 'Markdown',
+    })
+    .catch(AppError.handle);
 });
