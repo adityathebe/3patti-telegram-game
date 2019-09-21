@@ -3,11 +3,17 @@ const bot = require('../bot');
 
 const UserDB = require('../Database/User');
 
+const { Logger } = require('../Utilities/Logger');
+const AppError = require('../Utilities/ErrorHandler');
+
 bot.onText(/\/settings$/, async msg => {
   if (msg.chat.type !== 'private') return;
   const userInDb = await UserDB.findUser(msg.from.id.toString());
   if (userInDb === null) {
-    return bot.sendMessage(msg.chat.id, 'Please /register first');
+    return bot
+      .sendMessage(msg.chat.id, 'Please /register first')
+      .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'text' }))
+      .catch(AppError.handle);
   }
 
   let response = 'User Settings';
@@ -16,9 +22,12 @@ bot.onText(/\/settings$/, async msg => {
     resize_keyboard: true,
     one_time_keyboard: false,
   };
-  bot.sendMessage(msg.chat.id, response, {
-    reply_markup: replyKeyboardMarkup,
-  });
+  bot
+    .sendMessage(msg.chat.id, response, {
+      reply_markup: replyKeyboardMarkup,
+    })
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'replyKeyboard' }))
+    .catch(AppError.handle);
 });
 
 bot.onText(/Profile$/, async msg => {
@@ -34,19 +43,25 @@ bot.onText(/Profile$/, async msg => {
     weekday: 'long',
     day: '2-digit',
   })}`;
-  bot.sendMessage(msg.chat.id, response);
+  bot
+    .sendMessage(msg.chat.id, response)
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'text' }))
+    .catch(AppError.handle);
 });
 
 bot.onText(/Delete Account$/, async msg => {
   if (msg.chat.type !== 'private') return;
 
-  bot.sendMessage(msg.from.id, 'Are you sure ?', {
-    reply_markup: {
-      inline_keyboard: [
-        [{ text: 'No', callback_data: `DELETE-ACCOUNT-NO` }, { text: 'Yes', callback_data: `DELETE-ACCOUNT-YES` }],
-      ],
-    },
-  });
+  bot
+    .sendMessage(msg.from.id, 'Are you sure ?', {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: 'No', callback_data: `DELETE-ACCOUNT-NO` }, { text: 'Yes', callback_data: `DELETE-ACCOUNT-YES` }],
+        ],
+      },
+    })
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'inline_keyboard' }))
+    .catch(AppError.handle);
 });
 
 bot.on('callback_query', async query => {
@@ -56,11 +71,21 @@ bot.on('callback_query', async query => {
 
   if (userSelected === 'YES') {
     await UserDB.deleteUser(query.from.id.toString());
-    bot.sendMessage(query.message.chat.id, 'Your account has been deleted', {
-      reply_markup: { remove_keyboard: true },
-    });
+    bot
+      .sendMessage(query.message.chat.id, 'Your account has been deleted', {
+        reply_markup: { remove_keyboard: true },
+      })
+      .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'remove_keyboard' }))
+      .catch(AppError.handle);
   }
 
-  bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
-  bot.answerCallbackQuery(query.id);
+  bot
+    .deleteMessage(query.message.chat.id, query.message.message_id.toString())
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'deleteMessage' }))
+    .catch(AppError.handle);
+
+  bot
+    .answerCallbackQuery(query.id)
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
+    .catch(AppError.handle);
 });

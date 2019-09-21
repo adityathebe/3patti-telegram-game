@@ -32,6 +32,7 @@ if (require.main === module) {
         parse_mode: 'Markdown',
         reply_markup: { remove_keyboard: true },
       })
+      .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'text' }))
       .catch(AppError.handle);
   });
 
@@ -39,19 +40,19 @@ if (require.main === module) {
   // Logging //
   /////////////
   bot.on('text', async msg => {
-    Logger.debug(msg.text, {
-      telegramMessage: {
-        type: 'text',
+    Logger.debug({
+      telegramMsgReceived: {
+        msgType: 'text',
         message: msg,
       },
     });
   });
 
   bot.on('callback_query', async query => {
-    Logger.debug(query.data, {
-      telegramMessage: {
+    Logger.debug({
+      telegramMsgReceived: {
         query,
-        type: 'callback_query',
+        msgType: 'callback_query',
       },
     });
   });
@@ -59,10 +60,10 @@ if (require.main === module) {
   bot.on('polling_error', AppError.handle);
 
   bot.on('new_chat_members', msg => {
-    Logger.debug(msg.text, {
-      telegramMessage: {
+    Logger.debug({
+      telegramMsgReceived: {
         message: msg,
-        type: 'new_chat_members',
+        msgType: 'new_chat_members',
       },
     });
   });

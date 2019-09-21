@@ -7,12 +7,16 @@ const GameDb = require('../Database/Game');
 const { GAME_CREATED_MSG } = require('../constants');
 
 const AppError = require('../Utilities/ErrorHandler');
+const { Logger } = require('../Utilities/Logger');
 
 bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg => {
   try {
     // Only on group
     if (msg.chat.type === 'private') {
-      return bot.sendMessage(msg.chat.id, 'This command only works on groups').catch(AppError.handle);
+      return bot
+        .sendMessage(msg.chat.id, 'This command only works on groups')
+        .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'sendMessage' }))
+        .catch(AppError.handle);
     }
 
     // Check if user is registered
@@ -26,6 +30,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg
           reply_to_message_id: msg.message_id,
           reply_markup: replyMarkup,
         })
+        .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'inline_keyboard' }))
         .catch(AppError.handle);
     }
 
@@ -37,6 +42,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg
           .sendMessage(msg.chat.id, 'You cannot create more than one game in the same group', {
             reply_to_message_id: msg.message_id,
           })
+          .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'text' }))
           .catch(AppError.handle);
       }
     }
@@ -70,6 +76,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg
         reply_to_message_id: msg.message_id,
         parse_mode: 'Markdown',
       })
+      .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'inline_keyboard' }))
       .catch(AppError.handle);
   } catch (err) {
     AppError.handle(err);

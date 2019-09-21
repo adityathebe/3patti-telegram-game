@@ -8,12 +8,7 @@ const DEBUG_LOG_PATH = path.join(__dirname, '../Logs', 'debug.log');
 
 const Logger = winston.createLogger({
   level: 'verbose',
-  format: winston.format.combine(
-    winston.format.timestamp({
-      format: 'MM-DD HH:mm:ss',
-    }),
-    winston.format.json()
-  ),
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
   transports: [
     new winston.transports.File({ filename: INFO_LOG_PATH, level: 'info' }),
     new winston.transports.File({ filename: WARN_LOG_PATH, level: 'warn' }),

@@ -3,6 +3,7 @@ const bot = require('../bot');
 const { USERNAME_TG } = require('../config');
 const CardDeck = require('../Core/Cards/CardDeck');
 
+const { Logger } = require('../Utilities/Logger');
 const AppError = require('../Utilities/ErrorHandler');
 
 bot.onText(new RegExp('^/cards$'), handleGetCard);
@@ -26,12 +27,16 @@ async function handleGetCard(msg) {
         inline_keyboard: [[{ text: 'Re-draw', callback_data: msg.text }]],
       },
     })
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'inline_keyboard' }))
     .catch(AppError.handle);
 }
 
 bot.on('callback_query', async query => {
   const msg = query.message;
   msg.text = query.data;
-  bot.answerCallbackQuery(query.id, {}).catch(AppError.handle);
+  bot
+    .answerCallbackQuery(query.id, {})
+    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
+    .catch(AppError.handle);
   handleGetCard(msg);
 });
