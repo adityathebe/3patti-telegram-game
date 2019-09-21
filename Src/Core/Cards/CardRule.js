@@ -198,6 +198,10 @@ class CardRule {
     for (let i = 1; i < cardHands.length; i += 1) {
       const challengerHand = cardHands[i];
       const result = CardRule.compareCards(winnerHand, challengerHand);
+      if (result.isDraw) {
+        winnersIndices.push(i);
+        continue;
+      }
       const winnerStr = result.winner.format();
       if (winnerStr === winnerHand.format()) {
         if (challengerHand.format() === winnerStr) {

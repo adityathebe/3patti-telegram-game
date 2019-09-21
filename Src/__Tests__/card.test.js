@@ -151,6 +151,18 @@ describe('CardRule Tests', () => {
     });
   });
 
+  describe('Determine Winners', () => {
+    // Draw
+    it('should handle draw', () => {
+      const a = new CardHand([new Card('2', 'spades'), new Card('3', 'diamonds'), new Card('4', 'hearts')]);
+      const b = new CardHand([new Card('2', 'diamonds'), new Card('3', 'hearts'), new Card('4', 'spades')]);
+      const c = new CardHand([new Card('2', 'hearts'), new Card('3', 'spades'), new Card('4', 'diamonds')]);
+      const x = CardRule.determineWinners([a, b, c]);
+      expect(x.winner.format()).equal(a.format());
+      expect(x.winnersIndices).deep.equal([0, 1, 2])
+    });
+  });
+
   describe('CardRule.compareCards Win Tests', () => {
     // Trial
     it('should return winner = A trial when compared to J-Q-K Color Sequence', () => {
