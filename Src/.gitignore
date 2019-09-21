@@ -3,3 +3,7 @@ Playground
 node_modules
 
 config.js
+
+Logs/*
+
+!.gitkeep

@@ -1,8 +1,11 @@
 // @ts-check
+const { logger } = require('./Logger');
+
 const ErrorMap = {
   TelegramError: handleTelegramError,
   MongooseError: handleMongooseError,
   RequestError: handleRequestError,
+  ValidationError: handleValidatorError,
   Error: handleGeneralError,
 };
 
@@ -15,21 +18,21 @@ class AppError {
 module.exports = AppError;
 
 function handleTelegramError(errObject) {
-  console.error('\n\nTelegramError');
-  console.log(errObject.message);
+  logger.error(errObject.message);
 }
 
 function handleMongooseError(errObject) {
-  console.error('\n\nMongooseError');
-  console.log(errObject.message);
+  logger.error(errObject.message);
 }
 
 function handleRequestError(errObject) {
-  console.error('\n\nRequestError');
-  console.log(errObject.message);
+  logger.error(errObject.message);
+}
+
+function handleValidatorError(errObject) {
+  logger.error(errObject.message);
 }
 
 function handleGeneralError(errObject) {
-  console.error('\n\nGeneral Error');
-  console.log(errObject.message);
+  if (errObject.code === 'ETELEGRAM') return handleTelegramError(errObject);
 }
