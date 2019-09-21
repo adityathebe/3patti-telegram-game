@@ -1,5 +1,5 @@
 // @ts-check
-const { logger } = require('./Logger');
+const { Logger } = require('./Logger');
 
 const ErrorMap = {
   TelegramError: handleTelegramError,
@@ -18,19 +18,19 @@ class AppError {
 module.exports = AppError;
 
 function handleTelegramError(errObject) {
-  logger.error(errObject.message);
+  Logger.error(errObject.message);
 }
 
 function handleMongooseError(errObject) {
-  logger.error(errObject.message);
+  Logger.error(errObject.message);
 }
 
 function handleRequestError(errObject) {
-  logger.error(errObject.message);
+  Logger.error(errObject.message);
 }
 
 function handleValidatorError(errObject) {
-  logger.error(errObject.message);
+  Logger.error(errObject.message);
 }
 
 function handleGeneralError(errObject) {
