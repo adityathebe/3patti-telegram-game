@@ -9,16 +9,16 @@ describe('CardDeck Tests', () => {
   describe('Shuffle', () => {
     const deck = new CardDeck();
     it('should shuffle', () => {
-      const beforeShuffle = deck.cardsArray.map(card => card.formatCard());
+      const beforeShuffle = deck.cardsArray.map(card => card.format());
       deck.shuffle();
-      const afterShuffle = deck.cardsArray.map(card => card.formatCard());
+      const afterShuffle = deck.cardsArray.map(card => card.format());
       expect(beforeShuffle).to.not.equal(afterShuffle);
     });
 
     it('should shuffle 10 times', () => {
-      const beforeShuffle = deck.cardsArray.map(card => card.formatCard());
+      const beforeShuffle = deck.cardsArray.map(card => card.format());
       deck.shuffle(10);
-      const afterShuffle = deck.cardsArray.map(card => card.formatCard());
+      const afterShuffle = deck.cardsArray.map(card => card.format());
       expect(beforeShuffle).to.not.equal(afterShuffle);
     });
 

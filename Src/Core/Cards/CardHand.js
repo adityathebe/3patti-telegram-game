@@ -22,8 +22,8 @@ class CardHand {
     }
 
     // All cards must be unique
-    const cardsStr = cards.map(card => card.formatCard());
-    const duplicates = cards.filter((card, idx) => cardsStr.indexOf(card.formatCard()) !== idx);
+    const cardsStr = cards.map(card => card.format());
+    const duplicates = cards.filter((card, idx) => cardsStr.indexOf(card.format()) !== idx);
     if (duplicates.length > 0) {
       throw new Error('Duplicate cards');
     }
@@ -42,7 +42,7 @@ class CardHand {
   }
 
   format() {
-    return this.cards.map(card => card.formatCard()).join(' ');
+    return this.cards.map(card => card.format()).join(' ');
   }
 }
 

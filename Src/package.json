@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node bot.js",
     "test": "NODE_ENV=test mocha __Tests__/*.test.js",
-    "dev": "nodemon bot.js"
+    "dev": "nodemon bot.js",
+    "doc": "jsdoc2md --files Core/Cards/*.js > Docs/Cards/doc.md"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "jsdoc-to-markdown": "^5.0.1",
     "mocha": "^6.2.0",
     "nodemon": "^1.19.2"
   }

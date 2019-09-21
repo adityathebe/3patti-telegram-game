@@ -34,7 +34,7 @@ class Card {
     return `${cardValue}${cardSuit}`;
   }
 
-  formatCard() {
+  format() {
     return Card.formatCard(this);
   }
 }

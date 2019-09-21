@@ -106,7 +106,7 @@ class CardRule {
   }
 
   /**
-   * Commpare two cards
+   * Compare two cards
    * @param {CardHand} cardHandA
    * @param {CardHand} cardHandB
    * @returns {CompareResult}
@@ -164,7 +164,7 @@ class CardRule {
   }
 
   /**
-   * Commpare two cards
+   * Compare two cards
    * @param {CardHand} cardHandA
    * @param {CardHand} cardHandB
    *
