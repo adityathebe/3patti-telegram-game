@@ -21,7 +21,8 @@
   "homepage": "https://github.com/adityathebe/3patti-telegram-game#readme",
   "dependencies": {
     "mongoose": "^5.7.1",
-    "node-telegram-bot-api": "^0.30.0"
+    "node-telegram-bot-api": "^0.30.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
