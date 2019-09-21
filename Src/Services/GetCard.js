@@ -24,7 +24,7 @@ async function handleGetCard(msg) {
   bot
     .sendMessage(msg.chat.id, response, {
       reply_markup: {
-        inline_keyboard: [[{ text: 'Re-draw', callback_data: msg.text }]],
+        inline_keyboard: [[{ text: 'Re-draw', callback_data: `CARD-REDRAW-${msg.text}` }]],
       },
     })
     .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'inline_keyboard' }))
@@ -32,11 +32,12 @@ async function handleGetCard(msg) {
 }
 
 bot.on('callback_query', async query => {
-  const msg = query.message;
-  msg.text = query.data;
+  const payload = query.data;
+  query.message.text = payload.replace('CARD-REDRAW-', '');
+  if (payload.indexOf('CARD-REDRAW-') !== 0) return;
   bot
     .answerCallbackQuery(query.id, {})
     .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
     .catch(AppError.handle);
-  handleGetCard(msg);
+  handleGetCard(query.message);
 });
