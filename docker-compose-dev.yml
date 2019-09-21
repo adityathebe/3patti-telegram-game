@@ -10,6 +10,9 @@ services:
     environment:
       MONGO_HOST_URI: mongodb://mongodb_database:27017/
       MONGO_DB_NAME: 3patti
+    volumes:
+      - ./Src:/usr/src/3-patti-telegeram/
+    command: ["npm", "run", "dev"]
 
   mongodb:
     container_name: mongodb_database

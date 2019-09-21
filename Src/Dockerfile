@@ -4,8 +4,6 @@ RUN apt-get update
 
 WORKDIR /usr/src/3-patti-telegeram/
 
-RUN npm install -g nodemon
-
 COPY package.json .
 
 RUN npm install
