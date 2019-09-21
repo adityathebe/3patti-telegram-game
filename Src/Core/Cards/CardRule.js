@@ -121,13 +121,78 @@ class CardRule {
    * Commpare two cards
    * @param {CardHand} cardHandA
    * @param {CardHand} cardHandB
-   * @returns {CardHand}
+   * @returns {CompareResult}
    */
   static compareCards(cardHandA, cardHandB) {
-    const cardHandAInfo = CardRule.getInfo(cardHandA);
-    const cardHandBInfo = CardRule.getInfo(cardHandB);
+    const infoA = CardRule.getInfo(cardHandA);
+    const infoB = CardRule.getInfo(cardHandB);
 
-    return cardHandA;
+    // Trial Checks
+    if (infoA.trial.status && infoB.trial.status) return CardRule.compareCardValues(cardHandA, cardHandB);
+    if (infoA.trial.status && infoB.trial.status === false) return { winner: cardHandA, isDraw: false };
+    if (infoB.trial.status && infoA.trial.status === false) return { winner: cardHandB, isDraw: false };
+
+    // Sequence with color
+    if (infoA.sequence.status && infoB.sequence.status) {
+      if (infoA.color.status && infoB.color.status) return CardRule.compareCardValues(cardHandA, cardHandB);
+      if (infoA.color.status && !infoB.color.status) return { winner: cardHandA, isDraw: false };
+      if (!infoA.color.status && infoB.color.status) return { winner: cardHandB, isDraw: false };
+    }
+
+    // Sequence
+    if (infoA.sequence.status && infoB.sequence.status) return CardRule.compareCardValues(cardHandA, cardHandB);
+    if (infoA.sequence.status && !infoB.sequence.status) return { winner: cardHandA, isDraw: false };
+    if (!infoA.sequence.status && infoB.sequence.status) return { winner: cardHandB, isDraw: false };
+
+    // Color
+    if (infoA.color.status && infoB.color.status) {
+      if (infoA.pair.status && infoB.pair.status) {
+        const pairAVal = CardRule._getPairValue(cardHandA);
+        const pairBVal = CardRule._getPairValue(cardHandB);
+        if (pairAVal > pairBVal) return { winner: cardHandA, isDraw: false };
+        if (pairAVal < pairBVal) return { winner: cardHandB, isDraw: false };
+        if (pairAVal == pairBVal) return CardRule.compareCardValues(cardHandA, cardHandB);
+      }
+      if (infoA.pair.status && !infoB.pair.status) return { winner: cardHandA, isDraw: false };
+      if (!infoA.pair.status && infoB.pair.status) return { winner: cardHandB, isDraw: false };
+      if (!infoA.pair.status && !infoB.pair.status) return CardRule.compareCardValues(cardHandA, cardHandB);
+    }
+    if (infoA.color.status && !infoB.color.status) return { winner: cardHandA, isDraw: false };
+    if (!infoA.color.status && infoB.color.status) return { winner: cardHandB, isDraw: false };
+
+    // Pair
+    if (infoA.pair.status && infoB.pair.status) {
+      const pairAVal = CardRule._getPairValue(cardHandA);
+      const pairBVal = CardRule._getPairValue(cardHandB);
+      if (pairAVal > pairBVal) return { winner: cardHandA, isDraw: false };
+      if (pairAVal < pairBVal) return { winner: cardHandB, isDraw: false };
+      if (pairAVal == pairBVal) return CardRule.compareCardValues(cardHandA, cardHandB);
+    }
+    if (infoA.pair.status && !infoB.pair.status) return { winner: cardHandA, isDraw: false };
+    if (!infoA.pair.status && infoB.pair.status) return { winner: cardHandB, isDraw: false };
+
+    // Just values
+    return CardRule.compareCardValues(cardHandA, cardHandB);
+  }
+
+  /**
+   * Commpare two cards
+   * @param {CardHand} cardHandA
+   * @param {CardHand} cardHandB
+   *
+   * @typedef CompareResult
+   * @property {CardHand|null} winner
+   * @property {Boolean} isDraw
+   * @returns {CompareResult}
+   */
+  static compareCardValues(cardHandA, cardHandB) {
+    const valA = cardHandA.getValues({ sort: true });
+    const valB = cardHandB.getValues({ sort: true });
+    for (let i = 2; i >= 0; i -= 1) {
+      if (valA[i] > valB[i]) return { winner: cardHandA, isDraw: false };
+      else if (valB[i] > valA[i]) return { winner: cardHandB, isDraw: false };
+    }
+    return { winner: null, isDraw: true };
   }
 
   /**
