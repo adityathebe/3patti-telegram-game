@@ -1,17 +1,5 @@
 // @ts-check
-const Card = require('./Card');
 const CardHand = require('./CardHand');
-
-class CardResult {
-  /**
-   * @param {Number[]} winners
-   * @param {Object} [params]
-   */
-  constructor(winners, params = { isDraw: false }) {
-    this.winners = winners;
-    this.numWinners = winners.length;
-  }
-}
 
 class CardRule {
   /**
@@ -196,12 +184,31 @@ class CardRule {
   }
 
   /**
-   * @param {Card[][]} cardsList
-   * @returns {CardResult}
+   * @param {CardHand[]} cardHands
+   *
+   * @typedef WinnersResult
+   * @property {CardHand} winner;
+   * @property {Number[]} winnersIndices
+   * @returns {WinnersResult}
    */
-  static determineWinners(cardsList) {
-    if (cardsList.length < 2) throw RangeError('cardsList should be at least of length 2');
-    return new CardResult([]);
+  static determineWinners(cardHands) {
+    if (cardHands.length < 2) throw RangeError('cardsList should be at least of length 2');
+    let winnersIndices = [0];
+    let winnerHand = cardHands[0];
+    for (let i = 1; i < cardHands.length; i += 1) {
+      const challengerHand = cardHands[i];
+      const result = CardRule.compareCards(winnerHand, challengerHand);
+      const winnerStr = result.winner.format();
+      if (winnerStr === winnerHand.format()) {
+        if (challengerHand.format() === winnerStr) {
+          winnersIndices.push(i);
+        }
+      } else {
+        winnerHand = challengerHand;
+        winnersIndices = [i];
+      }
+    }
+    return { winner: winnerHand, winnersIndices };
   }
 }
 

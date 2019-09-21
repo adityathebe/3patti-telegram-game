@@ -2,6 +2,7 @@
 const bot = require('../bot');
 const { USERNAME_TG } = require('../config');
 const CardDeck = require('../Core/Cards/CardDeck');
+const CardRule = require('../Core/Cards/CardRule');
 
 const { Logger } = require('../Utilities/Logger');
 const AppError = require('../Utilities/ErrorHandler');
@@ -21,8 +22,16 @@ async function handleGetCard(msg) {
     response += `Player ${idx + 1} :\n${handStr}`;
     response += '\n\n';
   });
+
+  // Determine Winner
+  const result = CardRule.determineWinners(cardHands);
+  const numWinners = result.winnersIndices.length;
+  const winners = result.winnersIndices.map(idx => idx + 1).join(' ');
+  response += `*Winner = ${numWinners > 1 ? 'Players' : 'Player'} ${winners}*`;
+
   bot
     .sendMessage(msg.chat.id, response, {
+      parse_mode: 'Markdown',
       reply_markup: {
         inline_keyboard: [[{ text: 'Re-draw', callback_data: `CARD-REDRAW-${msg.text}` }]],
       },
