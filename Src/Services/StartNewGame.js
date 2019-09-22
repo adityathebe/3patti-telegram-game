@@ -4,6 +4,7 @@ const bot = require('../bot');
 const UserDB = require('../Database/User');
 const GameDB = require('../Database/Game');
 const CardDeck = require('../Core/Cards/CardDeck');
+const { GAME_NOT_EXIST_INFO, REGISTER_FIRST_INFO, AUTHOR_ONLY_CMD_INFO } = require('../constants');
 
 bot.on('callback_query', async query => {
   const payload = query.data;
@@ -15,7 +16,7 @@ bot.on('callback_query', async query => {
   const userInDb = await UserDB.findUser(query.from.id.toString());
   if (!userInDb) {
     return bot.answerCallbackQuery(query.id, {
-      text: 'Please register first',
+      text: REGISTER_FIRST_INFO,
     });
   }
 
@@ -23,7 +24,7 @@ bot.on('callback_query', async query => {
   if (gameData === null) {
     bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
     bot.answerCallbackQuery(query.id, {
-      text: 'Sorry, the game does not exist',
+      text: GAME_NOT_EXIST_INFO,
     });
     return;
   }
@@ -31,9 +32,9 @@ bot.on('callback_query', async query => {
   // User must be the author of the game
   if (gameData.authorId !== query.from.id.toString()) {
     return bot.answerCallbackQuery(query.id, {
-      text: 'This action can only be initiated by the author of the game',
-      show_alert: true,
       cache_time: 60,
+      show_alert: true,
+      text: AUTHOR_ONLY_CMD_INFO,
     });
   }
 

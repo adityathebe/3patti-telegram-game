@@ -4,7 +4,7 @@ const { USERNAME_TG } = require('../config');
 
 const UserDB = require('../Database/User');
 const GameDb = require('../Database/Game');
-const { GAME_CREATED_MSG } = require('../constants');
+const { GAME_CREATED_MSG, GROUP_ONLY_CMD_INFO} = require('../constants');
 
 const AppError = require('../Utilities/ErrorHandler');
 const { Logger } = require('../Utilities/Logger');
@@ -14,7 +14,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg
     // Only on group
     if (msg.chat.type === 'private') {
       return bot
-        .sendMessage(msg.chat.id, 'This command only works on groups')
+        .sendMessage(msg.chat.id, GROUP_ONLY_CMD_INFO)
         .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'sendMessage' }))
         .catch(AppError.handle);
     }

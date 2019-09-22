@@ -2,12 +2,13 @@
 const bot = require('../bot');
 
 const UserDB = require('../Database/User');
+const { REGISTER_FIRST_INFO } = require('../constants');
 
 bot.onText(/\/wallet|Wallet$/, async msg => {
   if (msg.chat.type !== 'private') return;
   const userInDb = await UserDB.findUser(msg.from.id.toString());
   if (userInDb === null) {
-    return bot.sendMessage(msg.chat.id, 'Please /register first');
+    return bot.sendMessage(msg.chat.id, REGISTER_FIRST_INFO);
   }
   const inlineKeyboardMarkup = {
     inline_keyboard: [

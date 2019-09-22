@@ -5,13 +5,14 @@ const UserDB = require('../Database/User');
 
 const { Logger } = require('../Utilities/Logger');
 const AppError = require('../Utilities/ErrorHandler');
+const { REGISTER_FIRST_INFO } = require('../constants');
 
 bot.onText(/\/settings$/, async msg => {
   if (msg.chat.type !== 'private') return;
   const userInDb = await UserDB.findUser(msg.from.id.toString());
   if (userInDb === null) {
     return bot
-      .sendMessage(msg.chat.id, 'Please /register first')
+      .sendMessage(msg.chat.id, REGISTER_FIRST_INFO)
       .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'text' }))
       .catch(AppError.handle);
   }

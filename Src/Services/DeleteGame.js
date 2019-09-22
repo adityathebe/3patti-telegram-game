@@ -6,6 +6,7 @@ const UserDB = require('../Database/User');
 
 const { Logger } = require('../Utilities/Logger');
 const AppError = require('../Utilities/ErrorHandler');
+const { AUTHOR_ONLY_CMD_INFO, GAME_NOT_EXIST_INFO, REGISTER_FIRST_INFO } = require('../constants');
 
 bot.on('callback_query', async query => {
   const payload = query.data;
@@ -16,7 +17,7 @@ bot.on('callback_query', async query => {
   const userInDb = await UserDB.findUser(query.from.id.toString());
   if (!userInDb) {
     return bot
-      .answerCallbackQuery(query.id, { text: 'Please register first' })
+      .answerCallbackQuery(query.id, { text: REGISTER_FIRST_INFO })
       .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
       .catch(AppError.handle);
   }
@@ -25,7 +26,7 @@ bot.on('callback_query', async query => {
   const gameData = await GameDB.findGame(gameId);
   if (gameData === null) {
     bot
-      .answerCallbackQuery(query.id, { text: 'Sorry, the game does not exist' })
+      .answerCallbackQuery(query.id, { text: GAME_NOT_EXIST_INFO })
       .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
       .catch(AppError.handle);
     bot
@@ -38,9 +39,9 @@ bot.on('callback_query', async query => {
   if (gameData.authorId !== userInDb.chatId) {
     return bot
       .answerCallbackQuery(query.id, {
-        text: 'This action can only be initiated by the author of the game',
-        show_alert: true,
         cache_time: 60,
+        show_alert: true,
+        text: AUTHOR_ONLY_CMD_INFO,
       })
       .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
       .catch(AppError.handle);

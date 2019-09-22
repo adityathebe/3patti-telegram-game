@@ -9,10 +9,24 @@ GREETING_MSG += '/creategame - Private options\n';
 GREETING_MSG += '\n**Hybrid Commands:**\n';
 GREETING_MSG += '/cards - Distribute cards\n';
 
-let GAME_CREATED_MSG = '**✅ New game created**';
-GAME_CREATED_MSG += '\n\n_Please make sure you register first._';
+const GAME_CREATED_MSG = '**✅ New game created**\n\n_Please make sure you register first._';
+
+//////////////////////////
+// Information messages //
+//////////////////////////
+const GROUP_ONLY_CMD_INFO = 'This command only works on groups';
+
+const AUTHOR_ONLY_CMD_INFO = 'This action can only be initiated by the author of the game';
+
+const GAME_NOT_EXIST_INFO = 'Sorry, the game does not exist';
+
+const REGISTER_FIRST_INFO = 'Please /register first';
 
 module.exports = {
   GREETING_MSG,
   GAME_CREATED_MSG,
+  REGISTER_FIRST_INFO,
+  GAME_NOT_EXIST_INFO,
+  GROUP_ONLY_CMD_INFO,
+  AUTHOR_ONLY_CMD_INFO,
 };
