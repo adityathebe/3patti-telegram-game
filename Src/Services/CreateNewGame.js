@@ -23,7 +23,7 @@ bot.onText(new RegExp(`(/creategame$)|(/creategame@${USERNAME_TG}$)`), async msg
     const doc = await UserDB.findUser(msg.from.id.toString());
     if (doc === null) {
       const replyMarkup = {
-        inline_keyboard: [[{ text: 'Register', url: `t.me/${USERNAME_TG}?start=register` }]],
+        inline_keyboard: [[{ text: 'Click here to register', url: `t.me/${USERNAME_TG}?start=register` }]],
       };
       return bot
         .sendMessage(msg.chat.id, 'You cannot create a game without registering', {

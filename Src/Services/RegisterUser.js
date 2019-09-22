@@ -20,6 +20,7 @@ async function handleContactMessage(msg) {
       if (err.code === 11000) {
         return bot.sendMessage(msg.chat.id, 'You have already registered.');
       }
+      AppError.handle(err);
     });
 }
 

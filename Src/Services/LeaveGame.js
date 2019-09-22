@@ -46,6 +46,18 @@ bot.on('callback_query', async query => {
       .catch(AppError.handle);
   }
 
+  // Author of the game cannot leave
+  if (gameData.authorId === userInDb.chatId) {
+    return bot
+      .answerCallbackQuery(query.id, {
+        cache_time: 60,
+        show_alert: true,
+        text: 'You cannot leave a game you created',
+      })
+      .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
+      .catch(AppError.handle);
+  }
+
   // Delete Game
   await GameDB.removeParticipant(gameId, userInDb.chatId);
   bot
