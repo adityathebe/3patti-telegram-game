@@ -2,10 +2,11 @@
 const bot = require('../bot');
 
 const UserDB = require('../Database/User');
+const GameDB = require('../Database/Game');
 
 const { Logger } = require('../Utilities/Logger');
 const AppError = require('../Utilities/ErrorHandler');
-const { REGISTER_FIRST_INFO } = require('../constants');
+const { REGISTER_FIRST_INFO, MAIN_MENU_KEYBOARD } = require('../constants');
 
 bot.onText(/\/settings$/, async msg => {
   if (msg.chat.type !== 'private') return;
@@ -18,15 +19,8 @@ bot.onText(/\/settings$/, async msg => {
   }
 
   let response = 'User Settings';
-  const replyKeyboardMarkup = {
-    keyboard: [[{ text: 'Profile' }, { text: 'Wallet' }], [{ text: 'Delete Account' }]],
-    resize_keyboard: true,
-    one_time_keyboard: false,
-  };
   bot
-    .sendMessage(msg.chat.id, response, {
-      reply_markup: replyKeyboardMarkup,
-    })
+    .sendMessage(msg.chat.id, response, { reply_markup: MAIN_MENU_KEYBOARD })
     .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'replyKeyboard' }))
     .catch(AppError.handle);
 });
@@ -65,28 +59,39 @@ bot.onText(/Delete Account$/, async msg => {
     .catch(AppError.handle);
 });
 
+/**
+ * There must not be any active games authored by the current user
+ */
 bot.on('callback_query', async query => {
   const payload = query.data;
   if (payload.indexOf('DELETE-ACCOUNT-') !== 0) return;
   const userSelected = payload.replace('DELETE-ACCOUNT-', '');
 
   if (userSelected === 'YES') {
-    await UserDB.deleteUser(query.from.id.toString());
-    bot
-      .sendMessage(query.message.chat.id, 'Your account has been deleted', {
-        reply_markup: { remove_keyboard: true },
-      })
-      .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'remove_keyboard' }))
-      .catch(AppError.handle);
+    const activeAuthoredGames = await GameDB.getGamesAuthoredByUser(query.from.id, { status: 'active' });
+    if (activeAuthoredGames.length !== 0) {
+      bot
+        .sendMessage(query.message.chat.id, 'You have active games. Cannot delete your account.')
+        .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'deleteMessage' }))
+        .catch(AppError.handle);
+    } else {
+      const numGamesDeleted = await GameDB.deleteAllGamesOfAuthor(query.from.id.toString());
+      await UserDB.deleteUser(query.from.id.toString());
+      Promise.all([
+        bot.sendMessage(query.message.chat.id, 'Your account has been deleted', {
+          reply_markup: { remove_keyboard: true },
+        }),
+        bot.sendMessage(query.message.chat.id, `All of the ${numGamesDeleted} game(s) you authored have been deleted.`),
+      ])
+        .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'delete-account' }))
+        .catch(AppError.handle);
+    }
   }
 
-  bot
-    .deleteMessage(query.message.chat.id, query.message.message_id.toString())
+  Promise.all([
+    bot.deleteMessage(query.message.chat.id, query.message.message_id.toString()),
+    bot.answerCallbackQuery(query.id),
+  ])
     .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'deleteMessage' }))
-    .catch(AppError.handle);
-
-  bot
-    .answerCallbackQuery(query.id)
-    .then(sentMsg => Logger.debug({ telegramMsgSent: sentMsg, msgType: 'answerCallbackQuery' }))
     .catch(AppError.handle);
 });

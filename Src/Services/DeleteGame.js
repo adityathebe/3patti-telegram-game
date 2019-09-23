@@ -8,6 +8,13 @@ const { Logger } = require('../Utilities/Logger');
 const AppError = require('../Utilities/ErrorHandler');
 const { AUTHOR_ONLY_CMD_INFO, GAME_NOT_EXIST_INFO, REGISTER_FIRST_INFO } = require('../constants');
 
+
+/**
+ * User must be registered
+ * Game must exist
+ * User must be the author of the game
+ * Game must not be currently active
+ */
 bot.on('callback_query', async query => {
   const payload = query.data;
   if (payload.indexOf('DELETE-GAME-') !== 0) return;

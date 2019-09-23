@@ -22,9 +22,19 @@ const GAME_NOT_EXIST_INFO = 'Sorry, the game does not exist';
 
 const REGISTER_FIRST_INFO = 'Please /register first';
 
+///////////////
+// Keyboards //
+///////////////
+const MAIN_MENU_KEYBOARD = {
+  keyboard: [[{ text: 'Profile' }, { text: 'Wallet' }], [{ text: 'Delete Account' }]],
+  resize_keyboard: true,
+  one_time_keyboard: false,
+};
+
 module.exports = {
   GREETING_MSG,
   GAME_CREATED_MSG,
+  MAIN_MENU_KEYBOARD,
   REGISTER_FIRST_INFO,
   GAME_NOT_EXIST_INFO,
   GROUP_ONLY_CMD_INFO,

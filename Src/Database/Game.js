@@ -80,6 +80,24 @@ class GameDB {
     const response = await GameModel.findByIdAndDelete(gameId);
     return response.toObject();
   }
+
+  /**
+   * Delete all games of an author
+   * @param {String} authorId
+   */
+  static async deleteAllGamesOfAuthor(authorId) {
+    const deleteCount = await GameModel.deleteMany({ authorId });
+    return deleteCount.deletedCount;
+  }
+
+  /**
+   * Get all active games authored by the user
+   */
+  static async getGamesAuthoredByUser(authorId, params) {
+    const query = { ...params, authorId };
+    const response = await GameModel.find(query);
+    return response.map(res => res.toObject());
+  }
 }
 
 module.exports = GameDB;
