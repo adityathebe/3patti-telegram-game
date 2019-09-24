@@ -3,7 +3,7 @@ const bot = require('../bot');
 
 const UserDB = require('../Database/User');
 const GameDB = require('../Database/Game');
-const GameRoundDb = require('../Database/Round');
+const GameRoundController = require('../Core/Game/GameRound');
 
 const CardDeck = require('../Core/Cards/CardDeck');
 const { GAME_NOT_EXIST_INFO, REGISTER_FIRST_INFO, AUTHOR_ONLY_CMD_INFO } = require('../constants');
@@ -49,15 +49,9 @@ bot.on('callback_query', async query => {
   }
 
   // Start game
+  await GameRoundController.createMaidenRound(gameId, gameData);
   await GameDB.updateGame(gameId, { status: 'active' });
-  await GameRoundDb.saveRound({
-    gameId: gameId,
-    potAmount: 0,
-    cardHands: [],
-    isComplete: false,
-    participants: gameData.initialParticipants,
-  });
-  
+
   bot.answerCallbackQuery(query.id);
   bot.deleteMessage(query.message.chat.id, query.message.message_id.toString());
   bot.sendMessage(query.message.chat.id, '**Game has started**', {

@@ -1,9 +1,7 @@
 // @ts-check
 const GameDb = require('../Database/Game');
 const GameRoundDb = require('../Database/Round');
-
-const CardDeck = require('../Core/Cards/CardDeck');
-const bot = require('../bot');
+const GameRoundController = require('../Core/Game/GameRound');
 
 const SLEEP_PERDIOD = 2;
 const sleep = sec => new Promise(a => setTimeout(a, sec * 1000));
@@ -32,27 +30,12 @@ class GameRunner {
 
     // 2. If the latestRound has no cards, generate and distribute them
     if (latestRound.cardHands.length === 0) {
-      const cardDeck = new CardDeck();
-      const cardHands = cardDeck.distribute(3);
-      const cardHandsStr = cardHands.map(cardHand => cardHand.toString());
-      await GameRoundDb.updateRound(latestRound._id, {
-        cardHands: cardHandsStr,
-      });
-
-      for (let i = 0; i < latestRound.participants.length; i += 1) {
-        const participant = latestRound.participants[i];
-        bot.sendMessage(participant, cardHandsStr[i]);
-      }
+      await GameRoundController.createAndDistributeCards(latestRound);
     }
 
     // 3. If the round is complete start new round
     if (latestRound.isComplete) {
-      await GameRoundDb.saveRound({
-        gameId: activeGame._id,
-        potAmount: 0,
-        isComplete: false,
-        participants: latestRound.participants,
-      });
+      await GameRoundController.createNewRound(activeGame, latestRound);
     }
   }
 }
