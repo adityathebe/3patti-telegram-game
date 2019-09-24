@@ -17,7 +17,13 @@ if (require.main === module) {
   Database.connect()
     .then(_ => {
       Logger.info('Connected to database');
-      return bot.startPolling();
+
+      // Start Polling //
+      bot.startPolling();
+
+      // Start Game //
+      const GameRunner = require('./Controller/GameRunner');
+      GameRunner.processGames();
     })
     .catch(err => {
       AppError.handle(err);
