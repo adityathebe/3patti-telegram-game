@@ -8,5 +8,6 @@ module.exports = mongoose.model(
     participants: [{ type: String }],
     potAmount: { type: Number, required: true },
     cardHands: [{ type: String }], // Store cardHands as string
+    isComplete: { type: Boolean, default: false },
   })
 );
