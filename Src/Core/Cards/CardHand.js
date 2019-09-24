@@ -44,6 +44,22 @@ class CardHand {
   format() {
     return this.cards.map(card => card.format()).join(' ');
   }
+
+  /**
+   * Creates a cardHand instance from the given string
+   * @param {String} cardHandStr
+   * @returns {CardHand}
+   */
+  fromString(cardHandStr) {
+    if (typeof cardHandStr !== 'string') {
+      throw new TypeError('`cardHandStr` must be a string');
+    }
+    if (cardHandStr.length !== 8) throw new Error('Invalid cardHandStr');
+    const cardsStrArray = cardHandStr.split('-');
+    if (cardsStrArray.length !== 3) throw new Error('Invalid cardHandStr');
+    const cardsArray = cardsStrArray.map(cardString => Card.fromString(cardString));
+    return new CardHand(cardsArray);
+  }
 }
 
 module.exports = CardHand;

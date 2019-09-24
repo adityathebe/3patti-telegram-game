@@ -34,8 +34,28 @@ class Card {
     return `${cardValue}${cardSuit}`;
   }
 
+  /**
+   * Returns a string of the given card
+   * @returns {String} Card String
+   */
   format() {
     return Card.formatCard(this);
+  }
+
+  /**
+   * Create a new Card object from a card string
+   * @param {String} cardString
+   * @returns {Card}
+   */
+  static fromString(cardString) {
+    if (typeof cardString !== 'string') {
+      throw new TypeError('`cardString` must be a string');
+    }
+    if (cardString.length !== 2) throw new Error('Invalid card string');
+    if (!POSSIBLE_VALUES.includes(cardString[0])) throw new Error('Invalid card string');
+    if (!POSSIBLE_SUITS.includes(cardString[1])) throw new Error('Invalid card string');
+
+    return new Card(cardString[0], cardString[1]);
   }
 }
 
