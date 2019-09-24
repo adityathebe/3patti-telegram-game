@@ -51,11 +51,15 @@ class Card {
     if (typeof cardString !== 'string') {
       throw new TypeError('`cardString` must be a string');
     }
-    if (cardString.length !== 2) throw new Error('Invalid card string');
-    if (!POSSIBLE_VALUES.includes(cardString[0])) throw new Error('Invalid card string');
-    if (!POSSIBLE_SUITS.includes(cardString[1])) throw new Error('Invalid card string');
+    if (cardString.length !== 2) throw new Error('Invalid card string. Must be of length 2.');
 
-    return new Card(cardString[0], cardString[1]);
+    // Convert symbols and values
+    const value = CardUtils.reverseValueMap[cardString[0]] || cardString[0];
+    const suit = CardUtils.reverseSuitMap[cardString[1]] || cardString[1];
+    if (!POSSIBLE_VALUES.includes(value)) throw new Error('Invalid card value.');
+    if (!POSSIBLE_SUITS.includes(suit)) throw new Error('Invalid card suit');
+
+    return new Card(value, suit);
   }
 }
 

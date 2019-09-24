@@ -50,13 +50,13 @@ class CardHand {
    * @param {String} cardHandStr
    * @returns {CardHand}
    */
-  fromString(cardHandStr) {
+  static fromString(cardHandStr) {
     if (typeof cardHandStr !== 'string') {
       throw new TypeError('`cardHandStr` must be a string');
     }
-    if (cardHandStr.length !== 8) throw new Error('Invalid cardHandStr');
+    if (cardHandStr.length !== 8) throw new Error('Invalid cardHandStr. Must be of length 8');
     const cardsStrArray = cardHandStr.split('-');
-    if (cardsStrArray.length !== 3) throw new Error('Invalid cardHandStr');
+    if (cardsStrArray.length !== 3) throw new Error('Invalid cardHandStr. 3 Cards must be provided');
     const cardsArray = cardsStrArray.map(cardString => Card.fromString(cardString));
     return new CardHand(cardsArray);
   }
