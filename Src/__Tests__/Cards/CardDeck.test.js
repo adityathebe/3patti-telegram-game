@@ -1,8 +1,8 @@
 const { expect } = require('chai');
 
-const Card = require('../Core/Cards/Card');
-const CardDeck = require('../Core/Cards/CardDeck');
-const CardHand = require('../Core/Cards/CardHand');
+const Card = require('../../Core/Cards/Card');
+const CardDeck = require('../../Core/Cards/CardDeck');
+const CardHand = require('../../Core/Cards/CardHand');
 
 describe('CardDeck Tests', () => {
   describe('Shuffle', () => {
@@ -36,7 +36,9 @@ describe('CardDeck Tests', () => {
         expect(err.name).to.equal('TypeError');
       }
     });
+  });
 
+  describe('CardDeck Creation from String', () => {
     it('should create a card deck from string', () => {
       const cardHandStr = 'A♦-J♦-Q♣';
       const targetValues = ['14', '11', '12'];
@@ -76,21 +78,5 @@ describe('CardDeck Tests', () => {
         expect(err).to.be.an.instanceof(Error);
       }
     });
-  });
-});
-
-describe('CardHand Tests', () => {
-  it('should throw `Duplicate cards` error on duplicates', () => {
-    try {
-      const cards = [new Card('2', 'spades'), new Card('3', 'diamonds'), new Card('2', 'spades')];
-      new CardHand(cards);
-    } catch (err) {
-      expect(err.message).to.equal('Duplicate cards');
-    }
-  });
-
-  it('should not throw `Duplicate cards` error on duplicates', () => {
-    const cards = [new Card('2', 'spades'), new Card('3', 'diamonds'), new Card('4', 'spades')];
-    new CardHand(cards);
   });
 });

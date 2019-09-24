@@ -1,9 +1,9 @@
 const { expect } = require('chai');
 
-const Card = require('../Core/Cards/Card');
-const CardDeck = require('../Core/Cards/CardDeck');
-const CardHand = require('../Core/Cards/CardHand');
-const CardRule = require('../Core/Cards/CardRule');
+const Card = require('../../Core/Cards/Card');
+const CardDeck = require('../../Core/Cards/CardDeck');
+const CardHand = require('../../Core/Cards/CardHand');
+const CardRule = require('../../Core/Cards/CardRule');
 
 describe('CardRule Tests', () => {
   describe('Sequence Tests', () => {

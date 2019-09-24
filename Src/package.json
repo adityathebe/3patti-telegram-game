@@ -5,7 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
-    "test": "NODE_ENV=test mocha __Tests__/*.test.js",
+    "test": "NODE_ENV=test mocha __Tests__/**/*.test.js",
     "dev": "nodemon bot.js",
     "doc": "jsdoc2md --files Core/Cards/*.js > Docs/Cards/doc.md"
   },
