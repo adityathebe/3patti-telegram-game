@@ -40,6 +40,11 @@ class RoundDb {
     const response = await GameRoundModel.findByIdAndUpdate(roundId, data);
     return response;
   }
+
+  static async getRoundFromId(roundId) {
+    const round = await GameRoundModel.findOne({ _id: roundId });
+    return round.toObject();
+  }
 }
 
 module.exports = RoundDb;

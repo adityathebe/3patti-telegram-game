@@ -3,9 +3,8 @@ const bot = require('../bot');
 
 const UserDB = require('../Database/User');
 const GameDB = require('../Database/Game');
-const GameRoundController = require('../Core/Game/GameRound');
+const GameRoundController = require('../Controller/GameRound');
 
-const CardDeck = require('../Core/Cards/CardDeck');
 const { GAME_NOT_EXIST_INFO, REGISTER_FIRST_INFO, AUTHOR_ONLY_CMD_INFO } = require('../constants');
 
 bot.on('callback_query', async query => {

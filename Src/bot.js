@@ -86,4 +86,6 @@ if (require.main === module) {
   require('./Services/RegisterUser');
   require('./Services/StartNewGame');
   require('./Services/CreateNewGame');
+
+  require('./Services/GamePlay/FetchCard');
 }
