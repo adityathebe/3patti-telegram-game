@@ -98,6 +98,11 @@ class GameDB {
     const response = await GameModel.find(query);
     return response.map(res => res.toObject());
   }
+
+  static async getAllActiveGames() {
+    const response = await GameModel.find({ status: 'active' });
+    return response.map(res => res.toObject());
+  }
 }
 
 module.exports = GameDB;
