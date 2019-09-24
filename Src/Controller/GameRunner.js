@@ -1,7 +1,7 @@
 // @ts-check
 const GameDb = require('../Database/Game');
 const GameRoundDb = require('../Database/Round');
-const GameRoundController = require('../Core/Game/GameRound');
+const GameRoundController = require('./GameRound');
 
 const SLEEP_PERDIOD = 2;
 const sleep = sec => new Promise(a => setTimeout(a, sec * 1000));

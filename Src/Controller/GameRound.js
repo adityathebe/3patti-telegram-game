@@ -1,11 +1,28 @@
 // @ts-check
-const bot = require('../../bot');
-const CardDeck = require('../../Core/Cards/CardDeck');
-const GameRoundDb = require('../../Database/Round');
+const bot = require('../bot');
+const CardDeck = require('../Core/Cards/CardDeck');
+const GameRoundDb = require('../Database/Round');
+
+function createCardsKeyboardMarkup(roundId) {
+  return {
+    inline_keyboard: [
+      [
+        { text: 'Card 1', callback_data: `FETCH-CARD-0-${roundId}` },
+        { text: 'Card 2', callback_data: `FETCH-CARD-1-${roundId}` },
+        { text: 'Card 3', callback_data: `FETCH-CARD-2-${roundId}` },
+      ],
+      [
+        { text: 'Raise', callback_data: `RAISE-${roundId}` },
+        { text: 'Blind', callback_data: `RAISE-${roundId}` },
+        { text: 'Pack', callback_data: `RAISE-${roundId}` },
+        { text: 'Show', callback_data: `RAISE-${roundId}` },
+      ],
+    ],
+  };
+}
 
 class GameRound {
   static async createMaidenRound(gameId, gameData) {
-    console.log(gameData);
     await GameRoundDb.saveRound({
       gameId,
       potAmount: 0,
@@ -34,7 +51,9 @@ class GameRound {
 
     for (let i = 0; i < lastRound.participants.length; i += 1) {
       const participant = lastRound.participants[i];
-      bot.sendMessage(participant, cardHandsStr[i]);
+      bot.sendMessage(participant, 'Here are your cards', {
+        reply_markup: createCardsKeyboardMarkup(lastRound._id),
+      });
     }
   }
 }
