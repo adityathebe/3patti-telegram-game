@@ -22,8 +22,8 @@ class CardHand {
     }
 
     // All cards must be unique
-    const cardsStr = cards.map(card => card.format());
-    const duplicates = cards.filter((card, idx) => cardsStr.indexOf(card.format()) !== idx);
+    const cardsStr = cards.map(card => card.toString());
+    const duplicates = cards.filter((card, idx) => cardsStr.indexOf(card.toString()) !== idx);
     if (duplicates.length > 0) {
       throw new Error('Duplicate cards');
     }
@@ -41,8 +41,8 @@ class CardHand {
     return this.cards.map(card => card.suit);
   }
 
-  format() {
-    return this.cards.map(card => card.format()).join(' ');
+  toString() {
+    return this.cards.map(card => card.toString()).join(' ');
   }
 
   /**
@@ -55,7 +55,7 @@ class CardHand {
       throw new TypeError('`cardHandStr` must be a string');
     }
     if (cardHandStr.length !== 8) throw new Error('Invalid cardHandStr. Must be of length 8');
-    const cardsStrArray = cardHandStr.split('-');
+    const cardsStrArray = cardHandStr.split(' ');
     if (cardsStrArray.length !== 3) throw new Error('Invalid cardHandStr. 3 Cards must be provided');
     const cardsArray = cardsStrArray.map(cardString => Card.fromString(cardString));
     return new CardHand(cardsArray);

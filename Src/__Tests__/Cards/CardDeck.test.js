@@ -8,16 +8,16 @@ describe('CardDeck Tests', () => {
   describe('Shuffle', () => {
     const deck = new CardDeck();
     it('should shuffle', () => {
-      const beforeShuffle = deck.cardsArray.map(card => card.format());
+      const beforeShuffle = deck.cardsArray.map(card => card.toString());
       deck.shuffle();
-      const afterShuffle = deck.cardsArray.map(card => card.format());
+      const afterShuffle = deck.cardsArray.map(card => card.toString());
       expect(beforeShuffle).to.not.equal(afterShuffle);
     });
 
     it('should shuffle 10 times', () => {
-      const beforeShuffle = deck.cardsArray.map(card => card.format());
+      const beforeShuffle = deck.cardsArray.map(card => card.toString());
       deck.shuffle(10);
-      const afterShuffle = deck.cardsArray.map(card => card.format());
+      const afterShuffle = deck.cardsArray.map(card => card.toString());
       expect(beforeShuffle).to.not.equal(afterShuffle);
     });
 
@@ -40,7 +40,7 @@ describe('CardDeck Tests', () => {
 
   describe('CardDeck Creation from String', () => {
     it('should create a card deck from string', () => {
-      const cardHandStr = 'A♦-J♦-Q♣';
+      const cardHandStr = 'A♦ J♦ Q♣';
       const targetValues = ['14', '11', '12'];
       const targetSuits = ['diamonds', 'diamonds', 'clubs'];
 
@@ -55,7 +55,7 @@ describe('CardDeck Tests', () => {
     });
 
     it('should create a card deck from string', () => {
-      const cardHandStr = '2♠-5♥-7♣';
+      const cardHandStr = '2♠ 5♥ 7♣';
       const targetValues = ['2', '5', '7'];
       const targetSuits = ['spades', 'hearts', 'clubs'];
 

@@ -34,7 +34,7 @@ class GameRunner {
     if (latestRound.cardHands.length === 0) {
       const cardDeck = new CardDeck();
       const cardHands = cardDeck.distribute(3);
-      const cardHandsStr = cardHands.map(cardHand => cardHand.format());
+      const cardHandsStr = cardHands.map(cardHand => cardHand.toString());
       await GameRoundDb.updateRound(latestRound._id, {
         cardHands: cardHandsStr,
       });

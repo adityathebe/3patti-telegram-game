@@ -18,7 +18,7 @@ async function handleGetCard(msg) {
   const cardHands = deck.shuffle(10).distribute(numPlayers);
   let response = '';
   cardHands.forEach((hand, idx) => {
-    const handStr = hand.format();
+    const handStr = hand.toString();
     response += `Player ${idx + 1} :\n${handStr}`;
     response += '\n\n';
   });

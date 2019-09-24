@@ -202,9 +202,9 @@ class CardRule {
         winnersIndices.push(i);
         continue;
       }
-      const winnerStr = result.winner.format();
-      if (winnerStr === winnerHand.format()) {
-        if (challengerHand.format() === winnerStr) {
+      const winnerStr = result.winner.toString();
+      if (winnerStr === winnerHand.toString()) {
+        if (challengerHand.toString() === winnerStr) {
           winnersIndices.push(i);
         }
       } else {

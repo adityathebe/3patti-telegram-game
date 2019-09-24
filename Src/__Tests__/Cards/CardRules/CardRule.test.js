@@ -123,7 +123,7 @@ describe('CardRule Tests', () => {
       const b = new CardHand([new Card('2', 'diamonds'), new Card('3', 'hearts'), new Card('4', 'spades')]);
       const c = new CardHand([new Card('2', 'hearts'), new Card('3', 'spades'), new Card('4', 'diamonds')]);
       const x = CardRule.determineWinners([a, b, c]);
-      expect(x.winner.format()).equal(a.format());
+      expect(x.winner.toString()).equal(a.toString());
       expect(x.winnersIndices).deep.equal([0, 1, 2]);
     });
   });

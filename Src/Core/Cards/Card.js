@@ -27,7 +27,7 @@ class Card {
    * @param {Card} card
    * @returns {String}
    */
-  static formatCard(card) {
+  static toString(card) {
     const cardSuit = CardUtils.suitsMap[card.suit];
     let cardValue = CardUtils.valueMap[card.value];
     cardValue = cardValue ? cardValue : card.value;
@@ -38,8 +38,8 @@ class Card {
    * Returns a string of the given card
    * @returns {String} Card String
    */
-  format() {
-    return Card.formatCard(this);
+  toString() {
+    return Card.toString(this);
   }
 
   /**
